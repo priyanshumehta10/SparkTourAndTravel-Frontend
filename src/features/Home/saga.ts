@@ -1,15 +1,21 @@
-import { put, takeLatest, delay } from "redux-saga/effects";
-import { fetchHomeDataRequest, fetchHomeDataSuccess, fetchHomeDataFailure } from "./slice.ts";
+import { put, takeLatest, call } from "redux-saga/effects";
+import type { SagaIterator } from "redux-saga";
+import {
+  fetchHomeDataRequest,
+  fetchHomeDataSuccess,
+  fetchHomeDataFailure,
+} from "./slice";
+import { getHomeData } from "../../service/api";
 
-function* fetchHomeDataSaga() {
+function* fetchHomeDataSaga(): SagaIterator {   // ✅ return type
   try {
-    yield delay(500);
-    yield put(fetchHomeDataSuccess({ message: "Home data loaded" }));
-  } catch {
-    yield put(fetchHomeDataFailure());
+    const data: any = yield call(getHomeData);
+    yield put(fetchHomeDataSuccess(data));
+  } catch (error: any) {
+    yield put(fetchHomeDataFailure(error.message || "Something went wrong"));
   }
 }
 
-export default function* homeSaga() {
+export default function* homeSaga(): SagaIterator {
   yield takeLatest(fetchHomeDataRequest.type, fetchHomeDataSaga);
 }

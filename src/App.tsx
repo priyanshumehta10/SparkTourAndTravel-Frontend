@@ -17,11 +17,12 @@ export default function App() {
       <Route element={<MainLayout />}>
         <Route element={<SharedRoute />}>
           <Route path="/login" element={<Login />} />
+          <Route path="/" element={<Home />} />
+
         </Route>
 
         {/* Logged-in only pages */}
         <Route element={<ProtectedRoute />}>
-          <Route path="/" element={<Home />} />
         </Route>
       </Route>
 

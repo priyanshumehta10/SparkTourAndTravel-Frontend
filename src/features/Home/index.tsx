@@ -6,6 +6,7 @@ import type { RootState } from "../../redux/store";
 export default function Home() {
   const dispatch = useDispatch();
   const { data, loading } = useSelector((state: RootState) => state.home);
+console.log(data,loading);
 
   useEffect(() => {
     dispatch(fetchHomeDataRequest());
