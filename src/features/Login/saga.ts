@@ -1,30 +1,23 @@
-import { put, takeLatest, delay } from "redux-saga/effects";
-import {
-  loginRequest,
-  loginSuccess,
-  loginFailure,
-} from "./slice";
+import { put, takeLatest, call } from "redux-saga/effects";
+import type { SagaIterator } from "redux-saga";
+import { loginUser } from "../../service/api";
+import { loginRequest, loginSuccess, loginFailure } from "./slice";
+import { fetchUser } from "../../Auth/slice"; // action to check user after login
 
-function* loginSaga(action: ReturnType<typeof loginRequest>) {
+function* loginSaga(action: { type: string; payload: { email: string; password: string } }): SagaIterator {
   try {
-    const { username, password } = action.payload;
+    // 1️⃣ Login API
+    const data: any = yield call(loginUser, action.payload.email, action.payload.password);
+    yield put(loginSuccess(data));
 
-    // Simulate API call delay
-    yield delay(800);
+    // 2️⃣ Immediately fetch user info after login
+    yield put(fetchUser()); // ✅ no hooks needed
 
-    // Dummy authentication logic
-    if (password === "admin123") {
-      yield put(loginSuccess({ username, role: "admin" }));
-    } else if (password === "user123") {
-      yield put(loginSuccess({ username, role: "user" }));
-    } else {
-      yield put(loginFailure("Invalid username or password"));
-    }
-  } catch {
-    yield put(loginFailure("Something went wrong"));
+  } catch (error: any) {
+    yield put(loginFailure(error.message || "Login failed"));
   }
 }
 
-export default function* authSaga() {
+export default function* authWatcherSaga(): SagaIterator {
   yield takeLatest(loginRequest.type, loginSaga);
 }

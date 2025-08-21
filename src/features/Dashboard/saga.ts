@@ -1,23 +1,17 @@
-import { put, takeLatest, delay } from "redux-saga/effects";
+import { put, takeLatest, call } from "redux-saga/effects";
+import type { SagaIterator } from "redux-saga";
 import {
   fetchDashboardStatsRequest,
   fetchDashboardStatsSuccess,
   fetchDashboardStatsFailure,
 } from "./slice.ts";
+import { getDashboardAPI } from "../../service/api.ts";
 
-function* fetchDashboardStatsSaga() {
+function* fetchDashboardStatsSaga(): SagaIterator {
   try {
-    // simulate API call delay
-    yield delay(800);
+    const data: any = yield call(getDashboardAPI);
 
-    // mock data
-    const mockStats = {
-      users: 120,
-      posts: 350,
-      sales: 78,
-    };
-
-    yield put(fetchDashboardStatsSuccess(mockStats));
+    yield put(fetchDashboardStatsSuccess(data));
   } catch (error) {
     yield put(fetchDashboardStatsFailure("Failed to load dashboard data"));
   }

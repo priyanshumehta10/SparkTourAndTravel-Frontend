@@ -1,8 +1,47 @@
 import { createSlice } from "@reduxjs/toolkit";
-import type {PayloadAction} from "@reduxjs/toolkit";
+import type { PayloadAction } from "@reduxjs/toolkit";
+
+// Types for data received from backend
+interface UsersStats {
+  total: number;
+  admins: number;
+  normalUsers: number;
+}
+
+interface PackagesStats {
+  total: number;
+}
+
+interface InquiriesStats {
+  total: number;
+}
+
+interface BookingByPackage {
+  packageTitle: string;
+  count: number;
+}
+
+interface BookingByMonth {
+  month: number;
+  count: number;
+}
+
+interface BookingsStats {
+  total: number;
+  revenue: number;
+  byPackage: BookingByPackage[];
+  byMonth: BookingByMonth[];
+}
+
+export interface DashboardStats {
+  users: UsersStats;
+  packages: PackagesStats;
+  inquiries: InquiriesStats;
+  bookings: BookingsStats;
+}
 
 export interface DashboardState {
-  stats: Record<string, number> | null;
+  stats: DashboardStats | null;
   loading: boolean;
   error: string | null;
 }
@@ -20,10 +59,11 @@ const dashboardSlice = createSlice({
     fetchDashboardStatsRequest: (state) => {
       state.loading = true;
       state.error = null;
+      state.stats = null;
     },
     fetchDashboardStatsSuccess: (
       state,
-      action: PayloadAction<Record<string, number>>
+      action: PayloadAction<DashboardStats>
     ) => {
       state.loading = false;
       state.stats = action.payload;
@@ -31,6 +71,7 @@ const dashboardSlice = createSlice({
     fetchDashboardStatsFailure: (state, action: PayloadAction<string>) => {
       state.loading = false;
       state.error = action.payload;
+      state.stats = null;
     },
   },
 });
