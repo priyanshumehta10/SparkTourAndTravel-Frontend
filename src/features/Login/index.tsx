@@ -2,24 +2,21 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../../redux/store";
 import { loginRequest } from "./slice";
-import { useNavigate } from "react-router-dom";
 
 export default function Login() {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const { loading, error, user } = useSelector((state: RootState) => state.login);
+console.log(loading,error,user);
 
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    dispatch(loginRequest({ username, password }));
+    dispatch(loginRequest({ email, password }));
   };
 
-  if (user) {
-    navigate(user.role === "admin" ? "/admin" : "/");
-  }
+
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
@@ -31,10 +28,10 @@ export default function Login() {
 
         <input
           type="text"
-          placeholder="Username"
+          placeholder="Email"
           className="border p-2 w-full mb-4 rounded"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
         />
 
         <input
