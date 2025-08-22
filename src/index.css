@@ -283,3 +283,12 @@ button:focus-visible {
 .custom-dark-rate .ant-rate-star:not(.ant-rate-star-full) .ant-rate-star-first {
   color: #6b7280 !important; /* Tailwind gray-500 */
 }
+
+/* CSS */
+.custom-switch.ant-switch {
+  background-color: #6b7280 !important; /* when off */
+}
+
+.custom-switch.ant-switch-checked {
+  background-color: #52c41a !important; /* when on (green or your custom color) */
+}

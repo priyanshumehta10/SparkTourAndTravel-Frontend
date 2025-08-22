@@ -1,9 +1,10 @@
-import { useState } from "react";
-import { Form, Input, InputNumber, Button, Upload, message } from "antd";
+import { useEffect, useRef, useState } from "react";
+import { Form, Input, InputNumber, Button, Upload, message, Switch } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-import { useDispatch } from "react-redux";
-import { createPackageRequest } from "../slice";
+import { useDispatch, useSelector } from "react-redux";
+import { createPackageRequest, resetCreated } from "../slice";
 import { useNavigate } from "react-router-dom";
+import type { RootState } from "../../../redux/store";
 
 const { TextArea } = Input;
 
@@ -16,11 +17,15 @@ interface ItineraryDay {
 const CreatePackages = () => {
     const [form] = Form.useForm();
     const navigate = useNavigate();
+    const fetchData = useRef(false);
     const [fileList, setFileList] = useState<any[]>([]);
     const [itinerary, setItinerary] = useState<ItineraryDay[]>([
         { day: 1, title: "", description: "" },
     ]);
-    const [uploading, setUploading] = useState(false);
+
+    const { created, loading } = useSelector(
+        (state: RootState) => state.packages
+    );
     const dispatch = useDispatch();
 
     const handleItineraryChange = (
@@ -53,7 +58,6 @@ const CreatePackages = () => {
     const onFinish = (values: any) => {
         console.log("all val", values);
 
-        setUploading(true);
         const formData = new FormData();
 
         // Append normal values
@@ -65,7 +69,7 @@ const CreatePackages = () => {
 
         // Append itinerary as JSON string
         itinerary.forEach((item: ItineraryDay, index: number) => {
-            formData.append(`itinerary[${index}][day]`, String(item.day)); 
+            formData.append(`itinerary[${index}][day]`, String(item.day));
             formData.append(`itinerary[${index}][title]`, item.title);
             formData.append(`itinerary[${index}][description]`, item.description);
         });
@@ -87,11 +91,19 @@ const CreatePackages = () => {
         dispatch(createPackageRequest(formData));
 
         setTimeout(() => {
-            setUploading(false);
-            message.success("Package created (mock)");
         }, 1000);
-    };
 
+
+    };
+    useEffect(() => {
+        if (!fetchData.current && created) {
+            fetchData.current = true;
+            navigate(-1);
+            message.success("Package created successfully");
+
+            if (created) dispatch((resetCreated()));
+        }
+    }, [created, dispatch]);
 
     return (
         <div className="max-w-2xl mx-auto bg-gray-900 text-white p-8 rounded-xl shadow-lg mt-8">
@@ -103,6 +115,18 @@ const CreatePackages = () => {
                 // force numeric widening so TS doesn't infer literal 0
                 initialValues={{ discount: 0 as number, price: 0 as number, finalPrice: 0 as number, duration: "" }}
             >
+                <Form.Item
+                    label={<span className="text-white">Hot</span>}
+                    name="Hot"
+                    rules={[{ required: true, message: "Is this a Hot Package" }]}
+                >
+                    <Switch
+                        checkedChildren="ON"
+                        unCheckedChildren="OFF"
+                        className="custom-switch"
+                    />
+
+                </Form.Item>
                 <Form.Item
                     label={<span className="text-white">Title</span>}
                     name="title"
@@ -153,7 +177,7 @@ const CreatePackages = () => {
                 <Form.Item
                     label={<span className="text-white">Final Price (₹)</span>}
                     name="finalPrice"
-                    // rules={[{ required: true, message: "Please enter the final price" }]}
+                // rules={[{ required: true, message: "Please enter the final price" }]}
                 >
                     <InputNumber<number>
                         min={0}
@@ -174,7 +198,7 @@ const CreatePackages = () => {
                     />
                 </Form.Item>
 
-                <Form.Item label={<span className="text-white">Images (max 5)</span>}>
+                <Form.Item rules={[{ required: true, message: "Please Upload atleast one image" }]} label={<span className="text-white">Images (max 5)</span>}>
                     <Upload
                         listType="picture-card"
                         fileList={fileList}
@@ -187,7 +211,7 @@ const CreatePackages = () => {
                     >
                         {fileList.length < 5 && (
                             <div>
-                                <PlusOutlined />
+                                <PlusOutlined style={{ color: "#fff" }} />
                                 <div style={{ marginTop: 8, color: "#fff" }}>Upload</div>
                             </div>
                         )}
@@ -201,22 +225,36 @@ const CreatePackages = () => {
                             <Input
                                 className="bg-gray-800 text-white placeholder-gray-400"
                                 placeholder="Day"
-                                style={{ width: 60 }}
+                                style={{ width: 60, color: "#fff" }}
                                 value={item.day}
                                 disabled
                             />
-                            <Input
-                                className="bg-gray-800 text-white placeholder-gray-400"
-                                placeholder="Title"
-                                value={item.title}
-                                onChange={(e) => handleItineraryChange(idx, "title", e.target.value)}
-                            />
-                            <Input
-                                className="bg-gray-800 text-white placeholder-gray-400"
-                                placeholder="Description"
-                                value={item.description}
-                                onChange={(e) => handleItineraryChange(idx, "description", e.target.value)}
-                            />
+                            <Form.Item
+                                required
+                                validateStatus={!item.title ? "error" : ""}
+                                help={!item.title ? "Title is required" : ""}
+                                className="mb-0 flex-1"
+                            >
+                                <Input
+                                    className="bg-gray-800 text-white placeholder-gray-400"
+                                    placeholder="Title"
+                                    value={item.title}
+                                    onChange={(e) => handleItineraryChange(idx, "title", e.target.value)}
+                                />
+                            </Form.Item>
+                            <Form.Item
+                                required
+                                validateStatus={!item.description ? "error" : ""}
+                                help={!item.description ? "Description is required" : ""}
+                                className="mb-0 flex-1"
+                            >
+                                <Input
+                                    className="bg-gray-800 text-white placeholder-gray-400"
+                                    placeholder="Description"
+                                    value={item.description}
+                                    onChange={(e) => handleItineraryChange(idx, "description", e.target.value)}
+                                />
+                            </Form.Item>
                             <Button
                                 danger
                                 disabled={itinerary.length === 1}
@@ -235,18 +273,18 @@ const CreatePackages = () => {
                     <Button
                         type="primary"
                         htmlType="submit"
-                        loading={uploading}
+                        loading={loading}
                         className="w-full bg-blue-600 hover:bg-blue-700"
                     >
                         Create Package
                     </Button>
-                    
+
                 </Form.Item>
                 <Form.Item>
-                   
+
                     <Button
                         className="w-full mt-4"
-                        onClick={()=> navigate(-1)}
+                        onClick={() => navigate(-1)}
                     >
                         Cancel
                     </Button>

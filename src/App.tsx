@@ -18,6 +18,7 @@ import Inquiries from "./features/Inquiries";
 import Review from "./features/Review";
 import Packages from "./features/Packages";
 import CreatePackages from "./features/Packages/components/CreatePackages";
+import EditPackage from "./features/Packages/components/EditPackages";
 
 export default function App() {
   const dispatch = useDispatch();
@@ -82,6 +83,8 @@ useEffect(() => {
           <Route path="/admin/review" element={<Review />} />
           <Route path="/admin/packages" element={<Packages />} />
           <Route path="/admin/packages/create" element={<CreatePackages />} />
+                    <Route path="/admin/packages/edit" element={<EditPackage />} />
+
         </Route>
       </Route>
     </Routes>
