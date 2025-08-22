@@ -24,6 +24,7 @@ export interface PackageData {
     duration: string;
     images: ImageItem[];
     itinerary: ItineraryDay[];
+    Hot: boolean; 
 }
 
 export interface PackagesStatePCK {
