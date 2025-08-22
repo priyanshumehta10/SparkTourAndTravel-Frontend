@@ -84,3 +84,14 @@ export async function createPackageData(data: any) {
   const response = await apiFile.post("/api/packages/admin/",data); 
   return response.data; 
 }
+
+export async function getPackageData(id:string) {
+  const response = await api.get(`/api/packages/${id}`); 
+  return response.data; 
+}
+
+export async function editPackageData(updateData: FormData) {
+  const id = updateData.get("_id"); 
+  const response = await apiFile.put(`/api/packages/admin/${id}`, updateData);
+  return response.data;
+}

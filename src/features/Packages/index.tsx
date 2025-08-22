@@ -1,9 +1,9 @@
 import { useEffect, useRef } from "react";
-import { Card, Carousel, Button, Popconfirm } from "antd";
+import { Card, Carousel, Button, Popconfirm, Switch } from "antd";
 import { EditOutlined, DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../../redux/store";
-import { fetchPackagesRequest, resetCreated, deletePackageRequest } from "./slice";
+import { fetchPackagesRequest, resetCreated, deletePackageRequest, fetchPackageRequest } from "./slice";
 import { useNavigate } from "react-router-dom";
 
 const index = () => {
@@ -17,8 +17,8 @@ const index = () => {
     };
 
     const handleEdit = (id: string) => {
-        // Implement edit logic or navigation here
-        alert(`Edit package ${id}`);
+        navigate(`/admin/packages/edit`);
+        dispatch(fetchPackageRequest(id));
     };
     const handleCreate = () => {
         navigate("/admin/packages/create");
@@ -110,6 +110,13 @@ const index = () => {
                         >
                             <h2 className="text-xl font-semibold text-white mb-2">{pkg.title}</h2>
                             <p className="text-gray-300 mb-2">{pkg.description}</p>
+                            <Switch
+                                checkedChildren="ON"
+                                unCheckedChildren="OFF"
+                                className="custom-switch"
+                                value={pkg.Hot}
+                                disabled
+                            />
                             <div className="mb-2">
                                 <span className="text-gray-400">Duration: </span>
                                 <span className="text-white">{pkg.duration}</span>

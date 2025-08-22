@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Sidebar from "../components/Sidebar";
 import { Outlet } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+import { MenuOutlined, CloseOutlined } from "@ant-design/icons";
 
 export default function AdminLayout() {
   const [isOpen, setIsOpen] = useState(false);
@@ -21,7 +21,7 @@ export default function AdminLayout() {
       >
         <div className="flex justify-end p-2">
           <button className="text-white" onClick={() => setIsOpen(false)}>
-            <X size={24} />
+            <CloseOutlined style={{ fontSize: 24 }} />
           </button>
         </div>
         <Sidebar />
@@ -42,7 +42,7 @@ export default function AdminLayout() {
           className="md:hidden mb-4 text-white"
           onClick={() => setIsOpen(true)}
         >
-          <Menu size={28} />
+          <MenuOutlined style={{ fontSize: 28 }} />
         </button>
 
         <Outlet />
