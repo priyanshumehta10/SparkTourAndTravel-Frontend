@@ -31,6 +31,7 @@ export interface PackageData {
     duration: string;
     images: ImageItem[];
     itinerary: ItineraryDay[];
+    Hot: boolean;
 }
 
 export interface PackagesState {
@@ -64,6 +65,7 @@ const EditPackage = () => {
                 discount: dataPerPck.discount,
                 finalPrice: dataPerPck.finalPrice,
                 duration: dataPerPck.duration,
+                Hot: dataPerPck.Hot,
             });
 
             setItinerary(dataPerPck.itinerary);
@@ -178,17 +180,17 @@ const EditPackage = () => {
             <Form form={form} layout="vertical" onFinish={onFinish}>
                 {/* Title */}
                 <Form.Item
-                                    label={<span className="text-white">Hot</span>}
-                                    name="Hot"
-                                    rules={[{ required: true, message: "Is this a Hot Package" }]}
-                                >
-                                    <Switch
-                                        checkedChildren="ON"
-                                        unCheckedChildren="OFF"
-                                        className="custom-switch"
-                                    />
-                
-                                </Form.Item>
+                    label={<span className="text-white">Hot</span>}
+                    name="Hot"
+                    rules={[{ required: true, message: "Is this a Hot Package" }]}
+                >
+                    <Switch
+                        checkedChildren="ON"
+                        unCheckedChildren="OFF"
+                        className="custom-switch"
+                    />
+
+                </Form.Item>
                 <Form.Item
                     label={<span className="text-white">Title</span>}
                     name="title"
