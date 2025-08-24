@@ -167,7 +167,9 @@ const EditPackage = () => {
         }
     }, [edited, dispatch]);
     if (loadingPerPck) {
-        return <div className="text-center text-white mt-8">Loading package...</div>;
+        return <div className="h-screen flex items-center justify-center bg-gray-900">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-100"></div>
+        </div>
     }
 
     if (error) {
@@ -213,7 +215,8 @@ const EditPackage = () => {
 
                 {/* Price & Discount */}
                 <div className="flex gap-4">
-                    <Form.Item label="Price (₹)" name="price" className="flex-1">
+                    <Form.Item label={<span className="text-white">Price (₹)</span>}
+                        name="price" className="flex-1">
                         <InputNumber<number>
                             min={0}
                             className="w-full bg-gray-800 text-white"
@@ -223,7 +226,8 @@ const EditPackage = () => {
                             }
                         />
                     </Form.Item>
-                    <Form.Item label="Discount (%)" name="discount" className="flex-1">
+                    <Form.Item label={<span className="text-white">Discount (%)</span>}
+                        name="discount" className="flex-1">
                         <InputNumber<number>
                             min={0}
                             max={100}
@@ -237,7 +241,8 @@ const EditPackage = () => {
                 </div>
 
                 {/* Final Price */}
-                <Form.Item label="Final Price (₹)" name="finalPrice">
+                <Form.Item label={<span className="text-white">Final Price (₹)</span>}
+                    name="finalPrice">
                     <InputNumber<number>
                         min={0}
                         className="w-full bg-gray-800 text-white"
@@ -249,12 +254,13 @@ const EditPackage = () => {
                 </Form.Item>
 
                 {/* Duration */}
-                <Form.Item label="Duration" name="duration">
+                <Form.Item label={<span className="text-white">Duration</span>}
+                    name="duration">
                     <Input className="bg-gray-800 text-white placeholder-gray-400" />
                 </Form.Item>
 
                 {/* Images */}
-                <Form.Item label="Images (max 5)">
+                <Form.Item label={<span className="text-white">Images (max 5)</span>}>
                     <Upload
                         listType="picture-card"
                         fileList={fileList}
@@ -280,8 +286,8 @@ const EditPackage = () => {
                     {itinerary.map((item, idx) => (
                         <div key={item._id || idx} className="flex gap-2 mb-2">
                             <Input
-                                className="bg-gray-800 text-white"
-                                style={{ width: 60 }}
+                                className="bg-gray-800 text-white placeholder-gray-400"
+                                style={{ width: 60, color: "#fff" }}
                                 value={item.day}
                                 disabled
                             />
