@@ -7,7 +7,7 @@ import usersSlice from "../features/Users/slice.ts"
 import inquirySlice from "../features/Inquiries/slice.ts"
 import ReviewSlice from "../features/Review/slice.ts";
 import PackagesSlice from "../features/Packages/slice.ts";
-
+import SignupSlice from "../features/Signup/slice.ts";
 export default combineReducers({
   home: homeReducer,
   login: loginReducer,
@@ -17,4 +17,5 @@ export default combineReducers({
   inquiry: inquirySlice,
   review: ReviewSlice,
   packages: PackagesSlice,
+  signup: SignupSlice,
 });

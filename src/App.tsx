@@ -19,6 +19,8 @@ import Review from "./features/Review";
 import Packages from "./features/Packages";
 import CreatePackages from "./features/Packages/components/CreatePackages";
 import EditPackage from "./features/Packages/components/EditPackages";
+import SignUpModal from "./features/Signup";
+import ForgotPasswordModal from "./features/ResetPassword";
 
 export default function App() {
   const dispatch = useDispatch();
@@ -28,21 +30,21 @@ export default function App() {
   const navigate = useNavigate();
   const location = useLocation();
 
-useEffect(() => {
-  if (!loading && isAuthenticated) {
-    if (user?.role === "admin") {
-      // 👇 login ke turant baad hi admin ko /admin/users bhej do
-      if (location.pathname === "/" || location.pathname === "/login") {
-        navigate("/admin", { replace: true });
-      }
-    } else {
-      // 👇 normal user ke liye homepage ya jo tu chahe
-      if (location.pathname === "/" || location.pathname === "/login") {
-        navigate("/", { replace: true });
+  useEffect(() => {
+    if (!loading && isAuthenticated) {
+      if (user?.role === "admin") {
+        // 👇 login ke turant baad hi admin ko /admin/users bhej do
+        if (location.pathname === "/" || location.pathname === "/login") {
+          navigate("/admin", { replace: true });
+        }
+      } else {
+        // 👇 normal user ke liye homepage ya jo tu chahe
+        if (location.pathname === "/" || location.pathname === "/login") {
+          navigate("/", { replace: true });
+        }
       }
     }
-  }
-}, [loading, isAuthenticated, user, navigate, location.pathname]);
+  }, [loading, isAuthenticated, user, navigate, location.pathname]);
 
 
   useEffect(() => {
@@ -67,6 +69,8 @@ useEffect(() => {
       <Route element={<MainLayout />}>
         <Route element={<SharedRoute />}>
           <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<SignUpModal />} />
+          <Route path="/forgetPassword" element={<ForgotPasswordModal/>} />
           <Route path="/" element={<Home />} />
         </Route>
 
@@ -83,7 +87,7 @@ useEffect(() => {
           <Route path="/admin/review" element={<Review />} />
           <Route path="/admin/packages" element={<Packages />} />
           <Route path="/admin/packages/create" element={<CreatePackages />} />
-                    <Route path="/admin/packages/edit" element={<EditPackage />} />
+          <Route path="/admin/packages/edit" element={<EditPackage />} />
 
         </Route>
       </Route>
