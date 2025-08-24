@@ -9,6 +9,11 @@ export const loginUser = async (email: string, password: string) => {
   return response.data;
 };
 
+export const signupUser = async (email: string, password: string, name:string) => {
+  const response = await api.post("/api/auth/signup", { email, password,name });
+  return response.data;
+};
+
 export const checkLoginAPI = async () => {
   const response = await api.get("/api/auth/me");
   return response.data;
@@ -95,3 +100,4 @@ export async function editPackageData(updateData: FormData) {
   const response = await apiFile.put(`/api/packages/admin/${id}`, updateData);
   return response.data;
 }
+

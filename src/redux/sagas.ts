@@ -7,6 +7,7 @@ import usersSaga from "../features/Users/saga";
 import inquirySaga from "../features/Inquiries/saga";
 import ReviewSaga from "../features/Review/saga";
 import PackagesSaga from "../features/Packages/saga"; 
+import SignupSaga from "../features/Signup/saga";
 export default function* rootSaga() {
   yield all([
     homeSaga(),
@@ -17,5 +18,6 @@ export default function* rootSaga() {
     inquirySaga(),
     ReviewSaga(),
     PackagesSaga(), 
+    SignupSaga(),
   ]);
 }
