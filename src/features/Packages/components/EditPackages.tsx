@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Form, Input, InputNumber, Button, Upload, message, Switch } from "antd";
+import { Form, Input, InputNumber, Button, Upload, message, Switch, Select } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { editPackageRequest, resetCreated } from "../slice";
@@ -32,6 +32,9 @@ export interface PackageData {
     images: ImageItem[];
     itinerary: ItineraryDay[];
     Hot: boolean;
+    tags: string[];
+     group?: string[];
+
 }
 
 export interface PackagesState {
@@ -40,6 +43,7 @@ export interface PackagesState {
     error: string | null;
     edited: boolean;
     loading: boolean;
+    tagData?: any[];
 }
 
 
@@ -52,10 +56,17 @@ const EditPackage = () => {
     const fetchData = useRef(false);
 
 
-    const { dataPerPck, loadingPerPck, error, edited, loading } = useSelector(
+    const { dataPerPck, loadingPerPck, error, edited, loading, tagData } = useSelector(
         (state: RootState) => state.packages as PackagesState
     );
+    const { data } = useSelector(
+        (state: RootState) => state.packageGroups
+    );
 
+    const simplifiedArray = data.map((item: any) => ({
+        id: item._id,
+        name: item.name
+    }));
     useEffect(() => {
         if (dataPerPck) {
             form.setFieldsValue({
@@ -66,6 +77,9 @@ const EditPackage = () => {
                 finalPrice: dataPerPck.finalPrice,
                 duration: dataPerPck.duration,
                 Hot: dataPerPck.Hot,
+                tags: dataPerPck.tags,
+                groupId: dataPerPck.group,
+
             });
 
             setItinerary(dataPerPck.itinerary);
@@ -115,7 +129,9 @@ const EditPackage = () => {
 
         // Append normal values
         Object.entries(values).forEach(([key, value]) => {
-            if (key !== "itinerary") {
+            if (key === "tags" && Array.isArray(value)) {
+                formData.append("tags", JSON.stringify(value));
+            } else if (key !== "itinerary") {
                 formData.append(key, value as any);
             }
         });
@@ -192,6 +208,27 @@ const EditPackage = () => {
                         className="custom-switch"
                     />
 
+                </Form.Item>
+                <Form.Item
+                    label={<span className="text-white">Tags</span>}
+                    name="tags"
+                >
+                    <Select
+                        mode="multiple"
+                        placeholder="Select tags"
+                        className="w-full bg-black text-white"
+                        options={tagData?.map((tag) => ({ label: tag, value: tag }))}
+                    />
+                </Form.Item>
+                <Form.Item
+                    label={<span className="text-white">Package Group</span>}
+                    name="groupId"
+                >
+                    <Select
+                        placeholder="Select tags"
+                        className="w-full bg-black text-white"
+                        options={simplifiedArray?.map((Group: { id: string, name: string }) => ({ label: Group.name, value: Group.id }))}
+                    />
                 </Form.Item>
                 <Form.Item
                     label={<span className="text-white">Title</span>}

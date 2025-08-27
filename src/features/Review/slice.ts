@@ -49,7 +49,7 @@ const ReviewSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
-    createReviewRequest: (state, _action: PayloadAction<any>) => {
+    createReviewRequest: (state, _action: PayloadAction<FormData>) => {
       state.loading = true;
       state.error = null;
       state.created = false;
@@ -57,7 +57,7 @@ const ReviewSlice = createSlice({
     createReviewSuccess: (state, action: PayloadAction<any>) => {
       state.loading = false;
       if (state.data) {
-        state.data = [action.payload, ...state.data];
+        state.data = [action.payload, ...state.data]; // prepend new review
       }
       state.error = null;
       state.created = true;
@@ -67,9 +67,10 @@ const ReviewSlice = createSlice({
       state.error = action.payload;
       state.created = false;
     },
+
     resetCreated: (state) => {
-  state.created = false;
-},
+      state.created = false;
+    },
   },
 });
 
@@ -83,6 +84,6 @@ export const {
   createReviewFailure,
   createReviewSuccess,
   createReviewRequest,
-  resetCreated
+  resetCreated,
 } = ReviewSlice.actions;
 export default ReviewSlice.reducer;

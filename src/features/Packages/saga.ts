@@ -5,7 +5,8 @@ import {
   deletePackageAPI,
   createPackageData,
   getPackageData,
-  editPackageData
+  editPackageData,
+  getTagData
 } from "../../service/api";
 import {
   fetchPackagesRequest,
@@ -23,6 +24,9 @@ import {
   editPackageRequest,
   editPackageSuccess,
   editPackageFailure,
+  fetchAllTagFailure,
+  fetchAllTagSuccess,
+  fetchAllTagRequest
 } from "./slice";
 
 function* fetchPackagesSaga(): SagaIterator {
@@ -31,6 +35,15 @@ function* fetchPackagesSaga(): SagaIterator {
     yield put(fetchPackagesSuccess(data));
   } catch (error: any) {
     yield put(fetchPackagesFailure(error.message || "Something went wrong"));
+  }
+}
+
+function* fetchAllTagSaga(): SagaIterator {
+  try {
+    const data: any = yield call(getTagData);
+    yield put(fetchAllTagSuccess(data));
+  } catch (error: any) {
+    yield put(fetchAllTagFailure(error.message || "Something went wrong"));
   }
 }
 
@@ -93,4 +106,5 @@ export default function* PackagesSaga(): SagaIterator {
   yield takeLatest(deletePackageRequest.type, deletePackageSaga);
   yield takeLatest(createPackageRequest.type, createPackageSaga);
   yield takeLatest(editPackageRequest.type, editPackageSaga);
+  yield takeLatest(fetchAllTagRequest.type, fetchAllTagSaga);
 }

@@ -3,12 +3,10 @@ import MainLayout from "./layouts/MainLayout";
 import AdminLayout from "./layouts/AdminLayout";
 import SharedRoute from "./routes/SharedRoute";
 import ProtectedRoute from "./routes/ProtectedRoute";
-import AdminRoute from "./routes/AdminRoute";
-
+import AdminRoute from "./routes/AdminRoute"; 
 import Home from "./features/Home";
 import Dashboard from "./features/Dashboard";
 import Login from "./features/Login";
-
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useRef } from "react";
 import { fetchUser } from "./Auth/slice";
@@ -19,8 +17,12 @@ import Review from "./features/Review";
 import Packages from "./features/Packages";
 import CreatePackages from "./features/Packages/components/CreatePackages";
 import EditPackage from "./features/Packages/components/EditPackages";
+import CreatePackageGroups from "./features/PackagesGroup/components/CreatePackageGroup";
+import EditPackageGroups from "./features/PackagesGroup/components/EditPackageGroup";
+
 import SignUpModal from "./features/Signup";
 import ForgotPasswordModal from "./features/ResetPassword";
+import PackageGroups from "./features/PackagesGroup";
 
 export default function App() {
   const dispatch = useDispatch();
@@ -88,7 +90,9 @@ export default function App() {
           <Route path="/admin/packages" element={<Packages />} />
           <Route path="/admin/packages/create" element={<CreatePackages />} />
           <Route path="/admin/packages/edit" element={<EditPackage />} />
-
+          <Route path="/admin/packageGroups" element={<PackageGroups />} />
+          <Route path="/admin/packageGroups/create" element={<CreatePackageGroups />} />
+          <Route path="/admin/packageGroups/edit" element={<EditPackageGroups />} />
         </Route>
       </Route>
     </Routes>

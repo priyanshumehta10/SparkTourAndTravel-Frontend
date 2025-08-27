@@ -71,12 +71,17 @@ export async function deleteReviewAPI(id:string) {
 }
 
 export async function CreateReviewData(data: any) {
-  const response = await api.post("/api/review/admin",data); 
+  const response = await apiFile.post("/api/review/admin",data); 
   return response.data.reviews; 
 }
 
 export async function getPackagesData() {
-  const response = await api.get("/api/packages/"); 
+  const response = await api.get("/api/packages"); 
+  return response.data; 
+}
+
+export async function getTagData() {
+  const response = await api.get("/api/packages/tags/all"); 
   return response.data; 
 }
 
@@ -101,3 +106,36 @@ export async function editPackageData(updateData: FormData) {
   return response.data;
 }
 
+export async function getPackageGroupsData() {
+  const response = await api.get(`/api/packageGroup/`); 
+  return response.data; 
+}
+
+export async function getPackageGroupData(id:string) {
+  const response = await api.get(`/api/packageGroup/${id}`); 
+  return response.data; 
+}
+
+export async function createPackageGroupData(data: any) {
+  const response = await apiFile.post("/api/packageGroup/admin/",data); 
+  return response.data; 
+}
+
+export async function deletePackageGroupAPI(id:string) {
+  const response = await api.delete(`/api/packageGroup/admin/${id}`); 
+  return response.data;
+}
+
+export async function editPackageGroupData(updateData: FormData) {
+  // Extract ID before removing
+  const raw = updateData.get("packageIds");
+  const id = JSON.parse(raw as string);
+
+  // Remove it from FormData
+  updateData.delete("packageIds");
+
+  // Now send request with ID in the URL
+  const response = await apiFile.put(`/api/packageGroup/admin/${id}`, updateData);
+
+  return response.data;
+}

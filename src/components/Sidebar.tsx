@@ -39,6 +39,16 @@ export default function Sidebar() {
           Users
         </NavLink>
         <NavLink
+          to="/admin/packageGroups"
+          className={({ isActive }) =>
+            `p-2 rounded transition ${
+              isActive ? "bg-indigo-600 text-white" : "hover:bg-gray-800"
+            }`
+          }
+        >
+          Package Groups
+        </NavLink>
+        <NavLink
           to="/admin/packages"
           className={({ isActive }) =>
             `p-2 rounded transition ${
@@ -68,16 +78,7 @@ export default function Sidebar() {
         >
           Review
         </NavLink>
-        <NavLink
-          to="/admin/settings"
-          className={({ isActive }) =>
-            `p-2 rounded transition ${
-              isActive ? "bg-indigo-600 text-white" : "hover:bg-gray-800"
-            }`
-          }
-        >
-          Settings
-        </NavLink>
+       
       </nav>
 
       <div className="mt-auto">
