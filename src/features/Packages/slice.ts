@@ -41,6 +41,7 @@ interface PackagesState {
   edited: boolean;
   loadingPerPck: boolean;
   dataPerPck?: PackagesStatePCK | null;
+  tagData?: any[];
 }
 
 const initialState: PackagesState = {
@@ -52,6 +53,7 @@ const initialState: PackagesState = {
   edited: false,
   loadingPerPck: false,
   dataPerPck: undefined,
+  tagData: []
 };
 
 const PackagesSlice = createSlice({
@@ -83,6 +85,20 @@ const PackagesSlice = createSlice({
       state.error = null;
     },
     fetchPackagesFailure: (state, action: PayloadAction<string>) => {
+      state.loadingPck = false;
+      state.error = action.payload;
+    },
+     fetchAllTagRequest: (state) => {
+      state.loadingPck = true;
+      state.error = null;
+    },
+    fetchAllTagSuccess: (state, action: PayloadAction<any[]>) => {
+        
+      state.loadingPck = false;
+      state.tagData = action.payload;
+      state.error = null;
+    },
+    fetchAllTagFailure: (state, action: PayloadAction<string>) => {
       state.loadingPck = false;
       state.error = action.payload;
     },
@@ -162,6 +178,9 @@ export const {
   editPackageRequest,
   editPackageSuccess,
   editPackageFailure,
-  resetCreated
+  resetCreated,
+  fetchAllTagFailure,
+  fetchAllTagSuccess,
+  fetchAllTagRequest
 } = PackagesSlice.actions;
 export default PackagesSlice.reducer;

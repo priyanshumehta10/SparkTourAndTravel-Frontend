@@ -38,18 +38,16 @@ function* deleteReviewSaga(action: {
   }
 }
 
-function* createReviewSaga(action: {
-  type: any;
-  payload: any;
-}): SagaIterator {
+function* createReviewSaga(action: { type: any; payload: FormData }): SagaIterator {
   try {
     const data: any = yield call(CreateReviewData, action.payload);
-    // If your API returns the new review as `data.review`
+    // API should return the created review object
     yield put(createReviewSuccess(data));
   } catch (error: any) {
     yield put(createReviewFailure(error.message || "Failed to create review"));
   }
 }
+
 
 export default function* ReviewSaga(): SagaIterator {
   yield takeLatest(fetchReviewRequest.type, fetchReviewSaga);

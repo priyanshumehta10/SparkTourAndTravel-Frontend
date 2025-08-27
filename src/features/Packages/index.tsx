@@ -3,7 +3,8 @@ import { Card, Carousel, Button, Popconfirm, Switch } from "antd";
 import { EditOutlined, DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../../redux/store";
-import { fetchPackagesRequest, resetCreated, deletePackageRequest, fetchPackageRequest } from "./slice";
+import { fetchPackagesRequest, resetCreated, deletePackageRequest, fetchPackageRequest, fetchAllTagRequest } from "./slice";
+import { fetchPackageGroupsRequest } from "../PackagesGroup/slice";
 import { useNavigate } from "react-router-dom";
 
 const index = () => {
@@ -28,6 +29,9 @@ const index = () => {
         if (!fetchData.current || created) {
             fetchData.current = true;
             dispatch(fetchPackagesRequest());
+            dispatch(fetchAllTagRequest());
+            dispatch(fetchPackageGroupsRequest());
+            
             if (created) dispatch(resetCreated());
         }
     }, [created, dispatch]);

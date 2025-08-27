@@ -68,6 +68,21 @@ const ReviewTable = () => {
         <span className="text-gray-400">{new Date(text).toLocaleString()}</span>
       ),
     },
+     {
+    title: "Image",
+    dataIndex: "image",
+    key: "image",
+    render: (image: any) =>
+      image ? (
+        <img
+          src={image.url}
+          alt="review"
+          style={{ width: 80, height: 80, objectFit: "cover", borderRadius: 4 }}
+        />
+      ) : (
+        <span className="text-gray-500">No Image</span>
+      ),
+  },
     {
       title: "Actions",
       key: "actions",

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Form, Input, InputNumber, Button, Upload, message, Switch } from "antd";
+import { Form, Input, InputNumber, Button, Upload, message, Switch, Select } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { createPackageRequest, resetCreated } from "../slice";
@@ -23,9 +23,17 @@ const CreatePackages = () => {
         { day: 1, title: "", description: "" },
     ]);
 
-    const { created, loading } = useSelector(
+    const { created, loading, tagData } = useSelector(
         (state: RootState) => state.packages
     );
+    const { data } = useSelector(
+        (state: RootState) => state.packageGroups
+    );
+
+    const simplifiedArray = data.map((item:any) => ({
+    id: item._id,
+    name: item.name
+}));
     const dispatch = useDispatch();
 
     const handleItineraryChange = (
@@ -56,13 +64,13 @@ const CreatePackages = () => {
     };
 
     const onFinish = (values: any) => {
-        console.log("all val", values);
 
         const formData = new FormData();
 
-        // Append normal values
         Object.entries(values).forEach(([key, value]) => {
-            if (key !== "itinerary") {
+            if (key === "tags" && Array.isArray(value)) {
+                formData.append("tags", JSON.stringify(value)); 
+            } else if (key !== "itinerary") {
                 formData.append(key, value as any);
             }
         });
@@ -73,21 +81,12 @@ const CreatePackages = () => {
             formData.append(`itinerary[${index}][title]`, item.title);
             formData.append(`itinerary[${index}][description]`, item.description);
         });
-
-
-        // Append images
         fileList.forEach((file) => {
             if (file.originFileObj) {
                 formData.append("images", file.originFileObj);
             }
         });
 
-        // Debug: Check formData
-        for (let [key, value] of formData.entries()) {
-            console.log(key, value);
-        }
-
-        // Dispatch action
         dispatch(createPackageRequest(formData));
 
         setTimeout(() => {
@@ -118,15 +117,38 @@ const CreatePackages = () => {
                 <Form.Item
                     label={<span className="text-white">Hot</span>}
                     name="Hot"
-                    rules={[{ required: true, message: "Is this a Hot Package" }]}
+                    initialValue={false}
                 >
                     <Switch
                         checkedChildren="ON"
                         unCheckedChildren="OFF"
                         className="custom-switch"
+                        
                     />
 
                 </Form.Item>
+                <Form.Item
+                    label={<span className="text-white">Tags</span>}
+                    name="tags"
+                >
+                    <Select
+                        mode="multiple"
+                        placeholder="Select tags"
+                        className="w-full bg-black text-white"
+                        options={tagData?.map((tag:{label:string,value:string}) => ({ label: tag, value: tag }))}
+                    />
+                </Form.Item>
+                <Form.Item
+                    label={<span className="text-white">Package Group</span>}
+                    name="groupId"
+                >
+                    <Select
+                        placeholder="Select tags"
+                        className="w-full bg-black text-white"
+                        options={simplifiedArray?.map((Group:{id:string,name:string}) => ({ label: Group.name, value:Group.id }))}
+                    />
+                </Form.Item>
+
                 <Form.Item
                     label={<span className="text-white">Title</span>}
                     name="title"
