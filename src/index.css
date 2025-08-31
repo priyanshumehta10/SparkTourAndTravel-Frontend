@@ -21,7 +21,7 @@ a {
   text-decoration: inherit;
 }
 a:hover {
-  color: #818cf8; /* indigo-500 (was #535bf2) */
+  color: #1E90FF; /* indigo-500 (was #535bf2) */
 }
 
 /* Headings */
@@ -292,3 +292,4 @@ button:focus-visible {
 .custom-switch.ant-switch-checked {
   background-color: #52c41a !important; /* when on (green or your custom color) */
 }
+
