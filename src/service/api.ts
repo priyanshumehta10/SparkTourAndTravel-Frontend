@@ -1,9 +1,24 @@
 import {api} from "./axiosInstance.ts";
 import {apiFile} from "./axiosInstance.ts";
 export async function getHomeData() {
-  const response = await api.get("/api/packages/"); 
+  const response = await api.get("/api/packages/?limit=3"); 
   return response.data;
 }
+
+export async function getReviews() {
+  const response = await api.get("/api/review/?limit=4"); 
+  console.log("response",response);
+  
+  return response.data;
+}
+
+export async function CreateInquiryData(data : any) {
+  const response = await api.post("/api/inquiries/",data); 
+  console.log("response",response);
+  
+  return response.data;
+}
+
 export const loginUser = async (email: string, password: string) => {
   const response = await api.post("/api/auth/login", { email, password });
   return response.data;
@@ -68,6 +83,17 @@ export async function getReviewData() {
 export async function deleteReviewAPI(id:string) {
   const response = await api.delete(`/api/review/admin/${id}`); 
   return response.data;
+}
+
+
+export async function CreateforgetPasswordData(data: any) {
+  const response = await api.post("/api/auth/forgot-password",data); 
+  return response.data; 
+}
+
+export async function ResetPasswordData(data: any) {
+  const response = await api.post("/api/auth/reset-password",data); 
+  return response.data; 
 }
 
 export async function CreateReviewData(data: any) {
@@ -139,3 +165,4 @@ export async function editPackageGroupData(updateData: FormData) {
 
   return response.data;
 }
+

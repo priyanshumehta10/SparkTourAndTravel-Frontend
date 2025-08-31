@@ -40,7 +40,7 @@ export default function LoginModal() {
     dispatch(loginRequest({ email, password }));
   };
   const handleClose = () => {
-    navigate(-1)
+    navigate("/")
   };
   return (
     <Modal

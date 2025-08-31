@@ -15,7 +15,7 @@ export default function Sidebar() {
 
   return (
     <aside className="bg-gray-900 w-64 p-4 flex flex-col min-h-screen shadow-lg">
-      <h2 className="text-xl font-bold mb-8 text-indigo-400">Spark Panel</h2>
+      <h2 className="text-xl font-bold mb-8 text-indigo-400">Admin Panel</h2>
       <nav className="flex flex-col gap-3 flex-1">
         <NavLink
           to="/admin"

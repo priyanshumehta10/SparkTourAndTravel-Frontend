@@ -53,7 +53,7 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen text-white dark-mode-dashboard p-6">
-      <h1 className="text-3xl font-bold mb-6">Spark Dashboard</h1>
+      <h1 className="text-3xl font-bold mb-6">Spark Tour and Travel Dashboard</h1>
 
       <Row gutter={16} className="mb-4">
         {[ 

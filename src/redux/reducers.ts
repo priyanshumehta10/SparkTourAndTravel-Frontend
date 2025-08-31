@@ -1,5 +1,5 @@
 import { combineReducers } from "@reduxjs/toolkit";
-import homeReducer from "../features/Home/slice.ts";
+import homeReducer from "../Main/Home/slice.ts";
 import loginReducer from "../features/Login/slice.ts";
 import dashboardReducer from "../features/Dashboard/slice.ts";
 import authSlice from "../Auth/slice.ts";
@@ -9,6 +9,10 @@ import ReviewSlice from "../features/Review/slice.ts";
 import PackagesSlice from "../features/Packages/slice.ts";
 import SignupSlice from "../features/Signup/slice.ts";
 import PackageGroupsSaga from "../features/PackagesGroup/slice.ts";
+import InquirySlice from "../Main/Contact/slice.ts";
+import forgetPasswordSlice from "../features/ResetPassword/slice.ts";
+import PackageFrontSlice from "../Main/Packages/slice.ts";
+
 export default combineReducers({
   home: homeReducer,
   login: loginReducer,
@@ -20,4 +24,7 @@ export default combineReducers({
   packages: PackagesSlice,
   signup: SignupSlice,
   packageGroups: PackageGroupsSaga,
+  Inquiry : InquirySlice,
+  forgetPassword : forgetPasswordSlice,
+  packageFront : PackageFrontSlice,
 });
