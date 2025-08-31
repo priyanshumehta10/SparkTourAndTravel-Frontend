@@ -42,14 +42,14 @@ export default function Navbar() {
     <header
       className={`sticky top-0 w-full z-50 transition-colors duration-500 ${navbarClass}`}
     >
-      <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-3 text-white">
+      <div className="max-w-7xl mx-auto flex items-center justify-between px-6  text-white">
 
         {/* ✅ Logo / Brand */}
         <Link to="/" className="flex items-center space-x-2">
           <img
             src={sparksLogo}
             alt="Logo"
-            className="h-20 w-auto"
+            className="h-24 w-auto"
           />
         </Link>
 

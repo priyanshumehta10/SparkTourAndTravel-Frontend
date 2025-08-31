@@ -36,7 +36,7 @@ export default function BucketListAdventures() {
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         transition={{ duration: 1, delay: 0.2 }}
-        className="text-lg md:text-xl text-[#305BAB] max-w-3xl mx-auto  leading-relaxed"
+        className="text-lg md:text-xl text-[#305BAB]  max-w-3xl mx-auto font-bold  leading-relaxed"
       >
         Every journey is unique, just like you. <br />
         Discover customized travel plans that fit your style, budget, and
@@ -48,7 +48,7 @@ export default function BucketListAdventures() {
         initial={{ opacity: 0, scale: 0.9 }}
         whileInView={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.7 }}
-        className="text-2xl md:text-3xl font-bold text-[#1a2753] "
+        className="text-4xl md:text-5xl font-bold text-[#1a2753]"
       >
         Bucket List Adventures
       </motion.h3>
@@ -61,6 +61,7 @@ export default function BucketListAdventures() {
             whileInView={{ opacity: 1, y: 0 }}
             whileHover={{ y: -12, scale: 1.05 }} // 🚀 lift card on hover
             transition={{ duration: 0.4, delay: index * 0.2 }}
+            className="mt-26"
           >
             <Card
               bordered={false}
@@ -72,10 +73,8 @@ export default function BucketListAdventures() {
                     src={item.images[0].url}
                     alt={item.title}
                     className="w-full h-60 object-cover rounded-lg"
-                    style={{border: "6px solid #ffffff"}}
+                    style={{ border: "6px solid #ffffff" }}
                   />
-                  {/* Overlay Gradient */}
-                  <div className="absolute inset-0 bg-gradient-to-t  to-transparent rounded-lg"></div>
 
                   <motion.h4
                     className="absolute bottom-3 left-3 right-3 
@@ -94,7 +93,7 @@ export default function BucketListAdventures() {
                       x: [0, 2, -2, 2, 0],
                     }}
                     transition={{
-                      duration: 8,          
+                      duration: 8,
                       repeat: Infinity,
                       ease: "circInOut",
                     }}
@@ -107,8 +106,8 @@ export default function BucketListAdventures() {
                 </div>
               }
               className="!bg-transparent !p-0 rounded-lg shadow-md 
-             hover:shadow-pink-400 transition-all duration-300 
-             overflow-hidden aspect-square flex flex-col justify-end"
+              hover:shadow-pink-400 transition-all duration-300 
+                overflow-hidden flex flex-col justify-end"
               bodyStyle={{ background: "transparent" }}
             />
 
