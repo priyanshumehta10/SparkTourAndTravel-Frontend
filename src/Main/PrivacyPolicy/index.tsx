@@ -76,13 +76,13 @@ export default function PrivacyPolicy() {
         <section>
           <h2 className="text-xl font-semibold text-[#305BAB]">Contact Us</h2>
           <p className="text-gray-700 mt-2">
-             8875949835 <br />
+              8529299647 <br />
+              8875949835 <br />
             <a href="mailto:gowithspark@gmail.com" className="text-[#305BAB] font-semibold">
               gowithspark@gmail.com
             </a>
             <br/>
-             Bahubali Colony Road, Near Vithal Service Center, Banswara
-            (Raj.) 327001
+             Shubash nagar , near vitthal service banswara rajasthan
           </p>
         </section>
 

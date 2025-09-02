@@ -18,11 +18,12 @@ export default function AppFooter() {
         {/* Contact Info */}
         <div className="text-center md:text-left">
           <h4 className="font-semibold text-[#1a2753] text-lg mb-3">Contact Us</h4>
-          <p className="text-sm">8875949835</p>
+          <p className="text-sm">8529299647
+            <br /> 8875949835
+          </p>
           <p className="text-sm">gowithspark@gmail.com</p>
           <p className="text-sm">
-             Bahubali Colony Road, Near Vithal Service Center, <br />
-            Banswara (Raj.) 327001
+             Shubash nagar , near vitthal service <br /> banswara rajasthan
           </p>
         </div>
 
