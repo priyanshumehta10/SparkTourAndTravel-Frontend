@@ -13,6 +13,7 @@ export default function AppFooter() {
           <a href="/privacy" className="hover:text-[#305BAB] transition">Privacy Policy</a>
           <a href="/userAgreement" className="hover:text-[#305BAB] transition">User Agreement</a>
           <a href="/terms" className="hover:text-[#305BAB] transition">Terms & Conditions</a>
+          <a href="/refundPolicy" className="hover:text-[#305BAB] transition">Refund Policy</a>
         </div>
 
         {/* Contact Info */}
