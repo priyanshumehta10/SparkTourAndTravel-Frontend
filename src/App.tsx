@@ -28,6 +28,7 @@ import PrivacyPolicy from "./Main/PrivacyPolicy";
 import UserAgreement from "./Main/UserAgreement";
 import TermsConditions from "./Main/TermsConditions";
 import PackagesFront from "./Main/Packages"
+import RefundPolicy from "./Main/Refund";
 
 export default function App() {
   const dispatch = useDispatch();
@@ -85,6 +86,7 @@ export default function App() {
           <Route path="/userAgreement" element={<UserAgreement />} />
           <Route path="/terms" element={<TermsConditions />} />
           <Route path="/packages" element={<PackagesFront />} />
+          <Route path="/refundPolicy" element={<RefundPolicy />} />
 
         </Route>
 
