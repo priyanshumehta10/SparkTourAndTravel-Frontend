@@ -33,9 +33,17 @@ export default function UpdateUserModal({ data, visible, onClose }: UpdateUserMo
     form
       .validateFields()
       .then((values) => {
-        dispatch(updateUserRequest({    id: data._id, ...values }));
-        message.success("User updated successfully");
-        onClose();
+        Modal.confirm({
+          title: "Do you want to update this user?",
+          content: "This action will overwrite the user details.",
+          okText: "Yes, Update",
+          cancelText: "No",
+          onOk: () => {
+            dispatch(updateUserRequest({ id: data._id, ...values }));
+            message.success("User updated successfully");
+            onClose();
+          },
+        });
       })
       .catch((info) => console.log("Validate Failed:", info));
   };
