@@ -12,6 +12,11 @@ interface ItineraryDay {
     day: number;
     title: string;
     description: string;
+    lunch: boolean;
+    breakfast: boolean;
+    dinner: boolean;
+    stay: string;
+    highTea: boolean;
 }
 
 const CreatePackages = () => {
@@ -20,7 +25,7 @@ const CreatePackages = () => {
     const fetchData = useRef(false);
     const [fileList, setFileList] = useState<any[]>([]);
     const [itinerary, setItinerary] = useState<ItineraryDay[]>([
-        { day: 1, title: "", description: "" },
+        { day: 1, title: "", description: "", lunch: false, breakfast: false, dinner: false, highTea: false, stay: "" },
     ]);
 
     const { created, loading, tagData } = useSelector(
@@ -30,16 +35,16 @@ const CreatePackages = () => {
         (state: RootState) => state.packageGroups
     );
 
-    const simplifiedArray = data.map((item:any) => ({
-    id: item._id,
-    name: item.name
-}));
+    const simplifiedArray = data.map((item: any) => ({
+        id: item._id,
+        name: item.name
+    }));
     const dispatch = useDispatch();
 
     const handleItineraryChange = (
         idx: number,
         field: keyof ItineraryDay,
-        value: string
+        value: string | boolean
     ) => {
         setItinerary((prev) =>
             prev.map((item, i) => (i === idx ? { ...item, [field]: value } : item))
@@ -49,7 +54,7 @@ const CreatePackages = () => {
     const addItineraryDay = () => {
         setItinerary((prev) => [
             ...prev,
-            { day: prev.length + 1, title: "", description: "" },
+            { day: prev.length + 1, title: "", description: "", lunch: false, breakfast: false, dinner: false, highTea: false, stay: "" },
         ]);
     };
 
@@ -69,7 +74,7 @@ const CreatePackages = () => {
 
         Object.entries(values).forEach(([key, value]) => {
             if (key === "tags" && Array.isArray(value)) {
-                formData.append("tags", JSON.stringify(value)); 
+                formData.append("tags", JSON.stringify(value));
             } else if (key !== "itinerary") {
                 formData.append(key, value as any);
             }
@@ -80,7 +85,15 @@ const CreatePackages = () => {
             formData.append(`itinerary[${index}][day]`, String(item.day));
             formData.append(`itinerary[${index}][title]`, item.title);
             formData.append(`itinerary[${index}][description]`, item.description);
+
+            // Meals & Stay
+            formData.append(`itinerary[${index}][breakfast]`, String(item.breakfast || false));
+            formData.append(`itinerary[${index}][lunch]`, String(item.lunch || false));
+            formData.append(`itinerary[${index}][dinner]`, String(item.dinner || false));
+            formData.append(`itinerary[${index}][highTea]`, String(item.highTea || false));
+            formData.append(`itinerary[${index}][stay]`, item.stay || "");
         });
+
         fileList.forEach((file) => {
             if (file.originFileObj) {
                 formData.append("images", file.originFileObj);
@@ -123,7 +136,7 @@ const CreatePackages = () => {
                         checkedChildren="ON"
                         unCheckedChildren="OFF"
                         className="custom-switch"
-                        
+
                     />
 
                 </Form.Item>
@@ -135,7 +148,7 @@ const CreatePackages = () => {
                         mode="multiple"
                         placeholder="Select tags"
                         className="w-full bg-black text-white"
-                        options={tagData?.map((tag:{label:string,value:string}) => ({ label: tag, value: tag }))}
+                        options={tagData?.map((tag: { label: string, value: string }) => ({ label: tag, value: tag }))}
                     />
                 </Form.Item>
                 <Form.Item
@@ -145,9 +158,25 @@ const CreatePackages = () => {
                     <Select
                         placeholder="Select tags"
                         className="w-full bg-black text-white"
-                        options={simplifiedArray?.map((Group:{id:string,name:string}) => ({ label: Group.name, value:Group.id }))}
+                        options={simplifiedArray?.map((Group: { id: string, name: string }) => ({ label: Group.name, value: Group.id }))}
                     />
                 </Form.Item>
+
+                <Form.Item
+                    label={<span className="text-white">Pricing Type</span>}
+                    name="pricingType"
+                    rules={[{ required: true, message: "Please select the pricing type" }]}
+                >
+                    <Select
+                        placeholder="Select pricing type"
+                        className="w-full bg-black text-white"
+                        options={[
+                            { label: "Per Person", value: "perPerson" },
+                            { label: "Couple", value: "couple" },
+                        ]}
+                    />
+                </Form.Item>
+
 
                 <Form.Item
                     label={<span className="text-white">Title</span>}
@@ -243,53 +272,109 @@ const CreatePackages = () => {
                 <div className="mb-4">
                     <label className="block text-white mb-2">Itinerary</label>
                     {itinerary.map((item, idx) => (
-                        <div key={idx} className="flex gap-2 mb-2">
-                            <Input
-                                className="bg-gray-800 text-white placeholder-gray-400"
-                                placeholder="Day"
-                                style={{ width: 60, color: "#fff" }}
-                                value={item.day}
-                                disabled
-                            />
-                            <Form.Item
-                                required
-                                validateStatus={!item.title ? "error" : ""}
-                                help={!item.title ? "Title is required" : ""}
-                                className="mb-0 flex-1"
-                            >
+                        <div key={idx} className="flex flex-col gap-2 mb-4 border border-gray-700 p-3 rounded-lg">
+                            <div className="flex gap-2">
                                 <Input
                                     className="bg-gray-800 text-white placeholder-gray-400"
-                                    placeholder="Title"
-                                    value={item.title}
-                                    onChange={(e) => handleItineraryChange(idx, "title", e.target.value)}
+                                    placeholder="Day"
+                                    style={{ width: 60 }}
+                                    value={item.day}
+                                    disabled
                                 />
-                            </Form.Item>
-                            <Form.Item
-                                required
-                                validateStatus={!item.description ? "error" : ""}
-                                help={!item.description ? "Description is required" : ""}
-                                className="mb-0 flex-1"
-                            >
+                                <Form.Item
+                                    required
+                                    validateStatus={!item.title ? "error" : ""}
+                                    help={!item.title ? "Title is required" : ""}
+                                    className="mb-0 flex-1"
+                                >
+                                    <Input
+                                        className="bg-gray-800 text-white placeholder-gray-400"
+                                        placeholder="Title"
+                                        value={item.title}
+                                        onChange={(e) => handleItineraryChange(idx, "title", e.target.value)}
+                                    />
+                                </Form.Item>
+                                <Form.Item
+                                    required
+                                    validateStatus={!item.description ? "error" : ""}
+                                    help={!item.description ? "Description is required" : ""}
+                                    className="mb-0 flex-1"
+                                >
+                                    <Input
+                                        className="bg-gray-800 text-white placeholder-gray-400"
+                                        placeholder="Description"
+                                        value={item.description}
+                                        onChange={(e) => handleItineraryChange(idx, "description", e.target.value)}
+                                    />
+                                </Form.Item>
+                                <Button
+                                    danger
+                                    disabled={itinerary.length === 1}
+                                    onClick={() => removeItineraryDay(idx)}
+                                >
+                                    Remove
+                                </Button>
+                            </div>
+
+                            {/* Meals & Stay */}
+                            <div className="flex flex-wrap gap-4 mt-2">
+                                <label className="text-white flex items-center gap-2">
+                                    <Switch
+                                        checked={item.breakfast}
+                                        onChange={(val) => handleItineraryChange(idx, "breakfast", val)}
+                                    />
+                                    Breakfast
+                                </label>
+                                <label className="text-white flex items-center gap-2">
+                                    <Switch
+                                        checked={item.lunch}
+                                        onChange={(val) => handleItineraryChange(idx, "lunch", val)}
+                                    />
+                                    Lunch
+                                </label>
+                                <label className="text-white flex items-center gap-2">
+                                    <Switch
+                                        checked={item.dinner}
+                                        onChange={(val) => handleItineraryChange(idx, "dinner", val)}
+                                    />
+                                    Dinner
+                                </label>
+                                <label className="text-white flex items-center gap-2">
+                                    <Switch
+                                        checked={item.highTea}
+                                        onChange={(val) => handleItineraryChange(idx, "highTea", val)}
+                                    />
+                                    High Tea
+                                </label>
                                 <Input
                                     className="bg-gray-800 text-white placeholder-gray-400"
-                                    placeholder="Description"
-                                    value={item.description}
-                                    onChange={(e) => handleItineraryChange(idx, "description", e.target.value)}
+                                    placeholder="Stay (e.g., Hotel, Resort)"
+                                    value={item.stay}
+                                    onChange={(e) => handleItineraryChange(idx, "stay", e.target.value)}
                                 />
-                            </Form.Item>
-                            <Button
-                                danger
-                                disabled={itinerary.length === 1}
-                                onClick={() => removeItineraryDay(idx)}
-                            >
-                                Remove
-                            </Button>
+                            </div>
                         </div>
+
                     ))}
                     <Button type="dashed" onClick={addItineraryDay} icon={<PlusOutlined />}>
                         Add Day
                     </Button>
                 </div>
+
+                <Form.Item
+                    label={<span className="text-white">Tour Inclusions</span>}
+                    name="tourInclusions"
+                >
+                    <TextArea rows={3} className="bg-gray-800 text-white placeholder-gray-400" />
+                </Form.Item>
+
+                <Form.Item
+                    label={<span className="text-white">Tour Exclusions</span>}
+                    name="tourExclusions"
+                >
+                    <TextArea rows={3} className="bg-gray-800 text-white placeholder-gray-400" />
+                </Form.Item>
+
 
                 <Form.Item>
                     <Button

@@ -12,6 +12,11 @@ interface ItineraryDay {
     day: number;
     title: string;
     description: string;
+    breakfast: boolean;
+    lunch: boolean;
+    dinner: boolean;
+    highTea: boolean;
+    stay: string;
     _id?: string;
 }
 
@@ -33,7 +38,9 @@ export interface PackageData {
     itinerary: ItineraryDay[];
     Hot: boolean;
     tags: string[];
-     group?: string[];
+    group?: string[];
+    tourInclusions:string;
+    tourExclusions:string;
 
 }
 
@@ -79,6 +86,8 @@ const EditPackage = () => {
                 Hot: dataPerPck.Hot,
                 tags: dataPerPck.tags,
                 groupId: dataPerPck.group,
+                tourExclusions: dataPerPck.tourExclusions,
+                tourInclusions: dataPerPck.tourInclusions
 
             });
 
@@ -95,20 +104,30 @@ const EditPackage = () => {
         }
     }, [dataPerPck, form]);
 
-    const handleItineraryChange = (
+    const handleItineraryChange = <K extends keyof ItineraryDay>(
         idx: number,
-        field: keyof ItineraryDay,
-        value: string
+        field: K,
+        value: ItineraryDay[K]
     ) => {
-        setItinerary((prev) =>
+        setItinerary(prev =>
             prev.map((item, i) => (i === idx ? { ...item, [field]: value } : item))
         );
     };
 
+
     const addItineraryDay = () => {
-        setItinerary((prev) => [
+        setItinerary(prev => [
             ...prev,
-            { day: prev.length + 1, title: "", description: "" },
+            {
+                day: prev.length + 1,
+                title: "",
+                description: "",
+                breakfast: false,
+                lunch: false,
+                dinner: false,
+                highTea: false,
+                stay: "",
+            },
         ]);
     };
 
@@ -137,14 +156,18 @@ const EditPackage = () => {
         });
 
         // Append itinerary
-        itinerary.forEach((item: ItineraryDay, index: number) => {
+        itinerary.forEach((item, index) => {
             formData.append(`itinerary[${index}][day]`, String(item.day));
             formData.append(`itinerary[${index}][title]`, item.title);
             formData.append(`itinerary[${index}][description]`, item.description);
-            if (item._id) {
-                formData.append(`itinerary[${index}][_id]`, item._id);
-            }
+            formData.append(`itinerary[${index}][breakfast]`, String(item.breakfast));
+            formData.append(`itinerary[${index}][lunch]`, String(item.lunch));
+            formData.append(`itinerary[${index}][dinner]`, String(item.dinner));
+            formData.append(`itinerary[${index}][highTea]`, String(item.highTea));
+            formData.append(`itinerary[${index}][stay]`, item.stay);
+            if (item._id) formData.append(`itinerary[${index}][_id]`, item._id);
         });
+
         const existingImages: { url: string; public_id: string }[] = [];
 
         // Handle images
@@ -321,38 +344,79 @@ const EditPackage = () => {
                 <div className="mb-4">
                     <label className="block text-white mb-2">Itinerary</label>
                     {itinerary.map((item, idx) => (
-                        <div key={item._id || idx} className="flex gap-2 mb-2">
-                            <Input
-                                className="bg-gray-800 text-white placeholder-gray-400"
-                                style={{ width: 60, color: "#fff" }}
-                                value={item.day}
-                                disabled
-                            />
-                            <Input
-                                className="bg-gray-800 text-white flex-1"
-                                placeholder="Title"
-                                value={item.title}
-                                onChange={(e) =>
-                                    handleItineraryChange(idx, "title", e.target.value)
-                                }
-                            />
-                            <Input
-                                className="bg-gray-800 text-white flex-1"
-                                placeholder="Description"
-                                value={item.description}
-                                onChange={(e) =>
-                                    handleItineraryChange(idx, "description", e.target.value)
-                                }
-                            />
-                            <Button
-                                danger
-                                disabled={itinerary.length === 1}
-                                onClick={() => removeItineraryDay(idx)}
-                            >
-                                Remove
-                            </Button>
+                        <div key={item._id || idx} className="mb-4 border-b border-gray-700 pb-2">
+                            <div className="flex gap-2 mb-2">
+                                <Input
+                                    className="bg-gray-800 text-white placeholder-gray-400"
+                                    style={{ width: 60, color: "#fff" }}
+                                    value={item.day}
+                                    disabled
+                                />
+                                <Input
+                                    className="bg-gray-800 text-white flex-1"
+                                    placeholder="Title"
+                                    value={item.title}
+                                    onChange={(e) =>
+                                        handleItineraryChange(idx, "title", e.target.value)
+                                    }
+                                />
+                                <Input
+                                    className="bg-gray-800 text-white flex-1"
+                                    placeholder="Description"
+                                    value={item.description}
+                                    onChange={(e) =>
+                                        handleItineraryChange(idx, "description", e.target.value)
+                                    }
+                                />
+                                <Button
+                                    danger
+                                    disabled={itinerary.length === 1}
+                                    onClick={() => removeItineraryDay(idx)}
+                                >
+                                    Remove
+                                </Button>
+                            </div>
+
+                            {/* Meal switches and stay input */}
+                            <div className="flex flex-wrap gap-4 mt-2">
+                                <label className="text-white flex items-center gap-2">
+                                    <Switch
+                                        checked={item.breakfast}
+                                        onChange={(val) => handleItineraryChange(idx, "breakfast", val)}
+                                    />
+                                    Breakfast
+                                </label>
+                                <label className="text-white flex items-center gap-2">
+                                    <Switch
+                                        checked={item.lunch}
+                                        onChange={(val) => handleItineraryChange(idx, "lunch", val)}
+                                    />
+                                    Lunch
+                                </label>
+                                <label className="text-white flex items-center gap-2">
+                                    <Switch
+                                        checked={item.dinner}
+                                        onChange={(val) => handleItineraryChange(idx, "dinner", val)}
+                                    />
+                                    Dinner
+                                </label>
+                                <label className="text-white flex items-center gap-2">
+                                    <Switch
+                                        checked={item.highTea}
+                                        onChange={(val) => handleItineraryChange(idx, "highTea", val)}
+                                    />
+                                    High Tea
+                                </label>
+                                <Input
+                                    className="bg-gray-800 text-white placeholder-gray-400"
+                                    placeholder="Stay (Hotel, Resort...)"
+                                    value={item.stay}
+                                    onChange={(e) => handleItineraryChange(idx, "stay", e.target.value)}
+                                />
+                            </div>
                         </div>
                     ))}
+
                     <Button
                         type="dashed"
                         onClick={addItineraryDay}
@@ -361,6 +425,21 @@ const EditPackage = () => {
                         Add Day
                     </Button>
                 </div>
+
+                 <Form.Item
+                                    label={<span className="text-white">Tour Inclusions</span>}
+                                    name="tourInclusions"
+                                >
+                                    <TextArea rows={3} className="bg-gray-800 text-white placeholder-gray-400" />
+                                </Form.Item>
+                
+                                <Form.Item
+                                    label={<span className="text-white">Tour Exclusions</span>}
+                                    name="tourExclusions"
+                                >
+                                    <TextArea rows={3} className="bg-gray-800 text-white placeholder-gray-400" />
+                                </Form.Item>
+                
 
                 {/* Submit / Cancel */}
                 <Form.Item>
