@@ -30,8 +30,8 @@ export default function AppFooter() {
 
         {/* Branding */}
         <div className="flex flex-col md:items-end items-center justify-center">
-          <h4 className="font-bold text-[#1a2753] text-xl">Spark Tour & Travel</h4>
-          <p className="text-sm text-gray-400">© 2025 Spark Tour and Travel</p>
+          <h4 className="font-bold text-[#1a2753] text-xl">Spark Tour & Travels</h4>
+          <p className="text-sm text-gray-400">© 2025 Spark Tour and Travels</p>
           <p className="text-xs text-gray-400">All rights reserved</p>
         </div>
       </div>
