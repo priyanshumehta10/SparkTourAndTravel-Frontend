@@ -137,6 +137,16 @@ export async function getPackageGroupsData() {
   return response.data; 
 }
 
+export async function getPackagesByGroupsData(id:string){
+  const response = await api.get(`api/packages/group/${id}`)
+    return response.data; 
+}
+
+export async function getPackageDetailsData(id:string){
+  const response = await api.get(`api/packages/${id}`)
+    return response.data; 
+}
+
 export async function getPackageGroupData(id:string) {
   const response = await api.get(`/api/packageGroup/${id}`); 
   return response.data; 

@@ -125,7 +125,7 @@ const CreatePackages = () => {
                 layout="vertical"
                 onFinish={onFinish}
                 // force numeric widening so TS doesn't infer literal 0
-                initialValues={{ discount: 0 as number, price: 0 as number, finalPrice: 0 as number, duration: "" }}
+                initialValues={{ discount: 0 as number,specialDiscount: 0 as number, price: 0 as number, finalPrice: 0 as number, duration: "" }}
             >
                 <Form.Item
                     label={<span className="text-white">Hot</span>}
@@ -210,7 +210,22 @@ const CreatePackages = () => {
                     </Form.Item>
 
                     <Form.Item
-                        label={<span className="text-white">Discount (%)</span>}
+                        label={<span className="text-white">Special Discount (%)</span>}
+                        name="specialDiscount"
+                        className="flex-1"
+                        rules={[{ required: true, message: "Please enter the Special Discount" }]}
+                    >
+                        <InputNumber<number>
+                            min={0}
+                            max={100}
+                            className="w-full bg-gray-800 text-white"
+                            formatter={(value) => (value !== undefined && value !== null ? `${value}%` : "")}
+                            parser={(value) => (value ? Number(value.replace(/%/g, "")) : 0)}
+                        />
+                    </Form.Item>
+
+                     <Form.Item
+                        label={<span className="text-white"> Discount (%)</span>}
                         name="discount"
                         className="flex-1"
                         rules={[{ required: true, message: "Please enter the discount" }]}
