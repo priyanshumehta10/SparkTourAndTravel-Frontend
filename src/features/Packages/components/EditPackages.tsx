@@ -32,6 +32,7 @@ export interface PackageData {
     description: string;
     price: number;
     discount: number;
+    specialDiscount:number;
     finalPrice: number;
     duration: string;
     images: ImageItem[];
@@ -81,6 +82,7 @@ const EditPackage = () => {
                 description: dataPerPck.description,
                 price: dataPerPck.price,
                 discount: dataPerPck.discount,
+                specialDiscount: dataPerPck.specialDiscount,
                 finalPrice: dataPerPck.finalPrice,
                 duration: dataPerPck.duration,
                 Hot: dataPerPck.Hot,
@@ -283,6 +285,18 @@ const EditPackage = () => {
                             formatter={(value) => (value ? `₹${value}` : "")}
                             parser={(value) =>
                                 value ? Number(value.replace(/[₹,\s]/g, "")) : 0
+                            }
+                        />
+                    </Form.Item>
+                    <Form.Item label={<span className="text-white"> Special Discount (%)</span>}
+                        name="specialDiscount" className="flex-1">
+                        <InputNumber<number>
+                            min={0}
+                            max={100}
+                            className="w-full bg-gray-800 text-white"
+                            formatter={(value) => (value ? `${value}%` : "")}
+                            parser={(value) =>
+                                value ? Number(value.replace(/%/g, "")) : 0
                             }
                         />
                     </Form.Item>

@@ -29,6 +29,9 @@ import UserAgreement from "./Main/UserAgreement";
 import TermsConditions from "./Main/TermsConditions";
 import PackagesFront from "./Main/Packages"
 import RefundPolicy from "./Main/Refund";
+import PackageCardList from "./Main/Packages/components/PackageCardList";
+import PackageDetails from "./Main/Packages/components/PackageDetails";
+import BookingForm from "./Main/Packages/components/BookingForm";
 
 export default function App() {
   const dispatch = useDispatch();
@@ -87,11 +90,15 @@ export default function App() {
           <Route path="/terms" element={<TermsConditions />} />
           <Route path="/packages" element={<PackagesFront />} />
           <Route path="/refundPolicy" element={<RefundPolicy />} />
+          <Route path="/packages/pck" element={<PackageCardList/>}/>
 
         </Route>
 
         {/* Logged-in only pages */}
         <Route element={<ProtectedRoute />}>
+                  <Route path="/packages/pck/:id" element={<PackageDetails/>}/>
+                  <Route path="/packages/pck/booking/:id" element={<BookingForm/>}/>
+
         </Route>
       </Route>
 

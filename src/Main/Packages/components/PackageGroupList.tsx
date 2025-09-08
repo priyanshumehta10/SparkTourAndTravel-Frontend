@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchPackageGroupRequest } from "../slice";
+import { fetchPackageGroupRequest, fetchPackagesByGroupRequest } from "../slice";
 import type { RootState } from "../../../redux/store";
 import { Spin } from "antd";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 const containerVariants = {
   hidden: {},
@@ -26,6 +27,7 @@ const categories = [
 const PackageGroupList = () => {
   const fetchData = useRef(false);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [activeCategory, setActiveCategory] = useState<string>("Popular Destinations");
 
   useEffect(() => {
@@ -34,6 +36,14 @@ const PackageGroupList = () => {
       dispatch(fetchPackageGroupRequest());
     }
   }, [dispatch]);
+
+const handlePackageGroup = (id: string) => {
+  console.log("Clicked package group id:", id);
+  // 👉 here you can navigate, dispatch Redux, or call an API
+  dispatch(fetchPackagesByGroupRequest(id))
+  navigate("/packages/pck")
+};
+
 
   const { PackageGroupLoading, PackageGroupdata } = useSelector(
     (state: RootState) => state.packageFront
@@ -104,6 +114,7 @@ const PackageGroupList = () => {
         {PackageGroupdata?.map((group: any, index: number) => (
           <motion.div
             key={index}
+            onClick={() => handlePackageGroup(group._id)}
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             whileHover={{ scale: 1.07 }}
