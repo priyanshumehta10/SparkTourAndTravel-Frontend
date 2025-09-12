@@ -1,10 +1,21 @@
-import { useLocation } from "react-router-dom";
-import { useState, useMemo } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useState, useMemo, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useDispatch, useSelector } from "react-redux";
+import { createOrderRequest } from "../slice";
+import type { RootState } from "../../../redux/store";
+import { confirmOrderRequest, resetCreateBookSlice, resetConfirmBookSlice } from "../slice.ts";
+import { message } from "antd";
 
 const BookingForm: React.FC = () => {
   const location = useLocation();
   const packageData = location.state?.package;
+  const dispatch = useDispatch();
+    const fetchConfirmData = useRef(false);
+const naviagte = useNavigate();
+  const { createOrderdata, confirmOrderdata } = useSelector(
+    (state: RootState) => state.packageFront
+  );
   console.log(packageData);
 
   const [people, setPeople] = useState([{ name: "", age: "", gender: "" }]);
@@ -26,10 +37,79 @@ const BookingForm: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const bookingData = { package: packageData, people, contact, totalPrice };
+    const bookingData = {
+      packageId: packageData._id,
+      participants: people,
+      contactEmail: contact.email,
+      contactPhone: contact.mobile,
+      amount: totalPrice
+    };
     console.log("Booking Data:", bookingData);
-    // Send bookingData to API here
+    dispatch(createOrderRequest(bookingData))
+
   };
+
+  useEffect(() => {
+    if (  createOrderdata) {
+
+      openRazorpay(createOrderdata)
+      dispatch(resetCreateBookSlice());
+    }
+  }, [createOrderdata, dispatch]);
+
+    useEffect(() => {
+    if (!fetchConfirmData.current && confirmOrderdata) {
+      fetchConfirmData.current = true;
+
+      dispatch(resetConfirmBookSlice());
+      message.success("Payment is Confirmed")
+      naviagte("/packages")
+    }
+  }, [confirmOrderdata, dispatch]);
+
+  const openRazorpay = (orderData: any) => {
+    if (!(window as any).Razorpay) {
+      console.error("Razorpay SDK not loaded!");
+      return;
+    }
+
+    const options = {
+      key: import.meta.env.VITE_RAZORPAY_KEY_ID, // ✅ correct key
+      amount: orderData.amount,
+      currency: orderData.currency,
+      name: "Spark Tour and Travels",
+      description: "Booking Payment",
+      order_id: orderData.orderId, // backend-generated orderId
+
+      prefill: {
+        email: orderData.contactEmail,
+        contact: orderData.contactPhone,
+      },
+
+      handler: function (response: any) {
+        dispatch(
+          confirmOrderRequest({
+            bookingId: orderData.bookingId,
+            razorpayPaymentId: response.razorpay_payment_id,
+            razorpayOrderId: response.razorpay_order_id,
+            packageId: orderData.packageId,
+            participants: orderData.participants,
+            contactEmail: orderData.contactEmail,
+            contactPhone: orderData.contactPhone,
+            amount: orderData.amount,
+          })
+        );
+        dispatch(resetCreateBookSlice()); 
+      },
+
+      theme: { color: "#3399cc" },
+    };
+
+    const rzp = new (window as any).Razorpay(options);
+    rzp.open();
+  };
+
+
 
   return (
     <div className="p-8 max-w-3xl mx-auto bg-gradient-to-br from-[#C6DCFF] via-white to-[#FDFDFD] shadow-xl rounded-2xl border border-[#C6DCFF]">
@@ -45,9 +125,8 @@ const BookingForm: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
           transition={{ duration: 0.5 }}
-          className={`bg-white border border-[#C6DCFF]/70 shadow-md p-5 rounded-xl mb-4 ${
-            isSpecial ? "ring-2 ring-pink-400" : ""
-          }`}
+          className={`bg-white border border-[#C6DCFF]/70 shadow-md p-5 rounded-xl mb-4 ${isSpecial ? "ring-2 ring-pink-400" : ""
+            }`}
         >
           {isSpecial && (
             <motion.div
