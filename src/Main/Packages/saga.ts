@@ -10,11 +10,19 @@ import {
   fetchPackageDetailsRequest,
   fetchPackageDetailsSuccess,
   fetchPackageDetailsFailure,
+  createOrderSuccess,
+  createOrderFailure,
+  createOrderRequest,
+  confirmOrderRequest,
+  confirmOrderSuccess,
+  confirmOrderFailure,
 } from "./slice";
 import {
   getPackageGroupsData,
   getPackagesByGroupsData,
   getPackageDetailsData,
+  createOrder,
+  confirmOrder,
 } from "../../service/api";
 
 function* fetchPackageGroupSaga(): SagaIterator {
@@ -63,16 +71,37 @@ function* fetchPackagesDetailsSaga(action: {
     yield put(fetchPackageDetailsSuccess(data));
   } catch (error: any) {
     yield put(
-      fetchPackageDetailsFailure(
-        error.message || "Something went wrong"
-      )
+      fetchPackageDetailsFailure(error.message || "Something went wrong")
     );
+  }
+}
+
+function* createOrderSaga(action: { type: any; payload: any }): SagaIterator {
+  try {
+    const data: any = yield call(createOrder, action.payload);
+    console.log("data in saga", data);
+
+    yield put(createOrderSuccess(data));
+  } catch (error: any) {
+    yield put(createOrderFailure(error.message || "Something went wrong"));
+  }
+}
+
+function* confirmOrderSaga(action: { type: any; payload: any }): SagaIterator {
+  try {
+    const data: any = yield call(confirmOrder, action.payload);
+    console.log("data in saga", data);
+
+    yield put(confirmOrderSuccess(data));
+  } catch (error: any) {
+    yield put(confirmOrderFailure(error.message || "Something went wrong"));
   }
 }
 
 export default function* homeSaga(): SagaIterator {
   yield takeLatest(fetchPackageGroupRequest.type, fetchPackageGroupSaga);
   yield takeLatest(fetchPackagesByGroupRequest.type, fetchPackagesByGroupSaga);
-    yield takeLatest(fetchPackageDetailsRequest.type, fetchPackagesDetailsSaga);
-
+  yield takeLatest(fetchPackageDetailsRequest.type, fetchPackagesDetailsSaga);
+  yield takeLatest(createOrderRequest.type, createOrderSaga);
+  yield takeLatest(confirmOrderRequest.type, confirmOrderSaga);
 }

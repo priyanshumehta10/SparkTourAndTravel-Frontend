@@ -176,3 +176,12 @@ export async function editPackageGroupData(updateData: FormData) {
   return response.data;
 }
 
+export async function createOrder(data:any) {
+  const response = await api.post(`/api/order/createOrder`,data); 
+  return response.data;
+}
+
+export async function confirmOrder(data:any) {
+  const response = await api.post(`/api/order/confirmPayment`,data); 
+  return response.data;
+}

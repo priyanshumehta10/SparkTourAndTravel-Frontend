@@ -11,9 +11,15 @@ export interface PackageGroupState {
   PackagesByGroupLoading: boolean;
   PackagesByGroupError: string | null;
   PackagesByGroupdata: any;
-  PackageDetailsLoading :boolean;
-  PackageDetailsError : string | null;
-  PackageDetailsdata :any;
+  PackageDetailsLoading: boolean;
+  PackageDetailsError: string | null;
+  PackageDetailsdata: any;
+  createOrderLoading: boolean;
+  createOrderError: string | null;
+  createOrderdata: any;
+  confirmOrderLoading: boolean;
+  confirmOrderError: string | null;
+  confirmOrderdata: any;
 }
 
 const initialState: PackageGroupState = {
@@ -26,9 +32,15 @@ const initialState: PackageGroupState = {
   PackagesByGroupLoading: false,
   PackagesByGroupError: null,
   PackagesByGroupdata: null,
-  PackageDetailsLoading:false,
+  PackageDetailsLoading: false,
   PackageDetailsError: null,
   PackageDetailsdata: null,
+  createOrderLoading: false,
+  createOrderError: null,
+  createOrderdata: null,
+  confirmOrderLoading: false,
+  confirmOrderError: null,
+  confirmOrderdata: null,
 };
 
 const PackageGroupSlice = createSlice({
@@ -50,7 +62,7 @@ const PackageGroupSlice = createSlice({
       state.PackageGroupError = action.payload;
       state.PackageGroupdata = null;
     },
-    fetchPackagesByGroupRequest: (state,_action: PayloadAction<string>) => {
+    fetchPackagesByGroupRequest: (state, _action: PayloadAction<string>) => {
       state.PackagesByGroupLoading = true;
       state.PackagesByGroupError = null;
       state.PackagesByGroupdata = null;
@@ -68,7 +80,7 @@ const PackageGroupSlice = createSlice({
       state.PackagesByGroupError = action.payload;
       state.PackagesByGroupdata = null;
     },
-    fetchPackageDetailsRequest: (state,_action: PayloadAction<string>) => {
+    fetchPackageDetailsRequest: (state, _action: PayloadAction<string>) => {
       state.PackageDetailsLoading = true;
       state.PackageDetailsError = null;
       state.PackageDetailsdata = null;
@@ -78,14 +90,49 @@ const PackageGroupSlice = createSlice({
       state.PackageDetailsError = null;
       state.PackageDetailsdata = action.payload;
     },
-    fetchPackageDetailsFailure: (
-      state,
-      action: PayloadAction<string>
-    ) => {
+    fetchPackageDetailsFailure: (state, action: PayloadAction<string>) => {
       state.PackageDetailsLoading = false;
       state.PackageDetailsError = action.payload;
       state.PackageDetailsdata = null;
     },
+    createOrderRequest: (state, _action: PayloadAction<any>) => {
+      state.createOrderLoading = true;
+      state.createOrderError = null;
+      state.createOrderdata = null;
+    },
+    createOrderSuccess: (state, action: PayloadAction<any>) => {
+      state.createOrderLoading = false;
+      state.createOrderError = null;
+      state.createOrderdata = action.payload;
+    },
+    createOrderFailure: (state, action: PayloadAction<string>) => {
+      state.createOrderLoading = false;
+      state.createOrderError = action.payload;
+      state.createOrderdata = null;
+    },
+    confirmOrderRequest: (state, _action: PayloadAction<any>) => {
+      state.confirmOrderLoading = true;
+      state.confirmOrderError = null;
+      state.confirmOrderdata = null;
+    },
+    confirmOrderSuccess: (state, action: PayloadAction<any>) => {
+      state.confirmOrderLoading = false;
+      state.confirmOrderError = null;
+      state.confirmOrderdata = action.payload;
+    },
+    confirmOrderFailure: (state, action: PayloadAction<string>) => {
+      state.confirmOrderLoading = false;
+      state.confirmOrderError = action.payload;
+      state.confirmOrderdata = null;
+    },
+    resetCreateBookSlice:(state) => {
+state.createOrderLoading = false;
+      state.createOrderdata = null;
+    },
+    resetConfirmBookSlice:(state) => {
+      state.confirmOrderLoading = false;
+      state.confirmOrderdata = null;
+    }
   },
 });
 
@@ -98,7 +145,16 @@ export const {
   fetchPackagesByGroupRequestFailure,
   fetchPackageDetailsRequest,
   fetchPackageDetailsSuccess,
-  fetchPackageDetailsFailure
+  fetchPackageDetailsFailure,
+  createOrderSuccess,
+  createOrderFailure,
+  createOrderRequest,
+  confirmOrderRequest,
+  confirmOrderSuccess,
+  confirmOrderFailure,
+  resetCreateBookSlice,
+  resetConfirmBookSlice,
+  
 } = PackageGroupSlice.actions;
 
 export default PackageGroupSlice.reducer;
