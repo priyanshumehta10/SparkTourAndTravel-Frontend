@@ -20,7 +20,7 @@ const HomeReviews: React.FC = () => {
 
   return (
     <div className="bg-white p-6">
-      
+
       {/* Heading */}
       <motion.h2
         initial={{ opacity: 0, y: -30 }}
@@ -42,22 +42,16 @@ const HomeReviews: React.FC = () => {
             transition={{
               duration: 0.6,
               delay: index * 0.1,
-              ease: "easeOut",
+              ease: "easeIn",
             }}
           >
             <motion.div
               whileHover={{
-                scale: 1.05,
-                boxShadow: [
-                  "0 0 15px #ff69b4", // Pink
-                  "0 0 15px #C6DCFF", // Light
-                  "0 0 15px #305BAB", // Medium
-                  "0 0 15px #1a2753", // Dark
-                ],
-                transition: { duration: 0.6, repeat: Infinity, repeatType: "mirror" },
+                scale: 1.02,
+                boxShadow: "0 8px 20px rgba(0,0,0,0.15)", // smooth popup shadow
               }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
             >
-              {/* Review Card */}
               <Card
                 hoverable
                 className="rounded-2xl border border-gray-200 text-center transition-all duration-300"
@@ -83,6 +77,7 @@ const HomeReviews: React.FC = () => {
                 </p>
               </Card>
             </motion.div>
+
           </motion.div>
         ))}
       </div>
