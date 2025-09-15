@@ -8,6 +8,9 @@ export interface MyOrdersState {
   MyOrdersLoading: boolean;
   MyOrdersError: any;
   MyOrdersdata: any;
+  payRemainingAmountLoading: boolean;
+  payRemainingAmountError: any;
+  payRemainingAmountdata: any;
 }
 
 const initialState: MyOrdersState = {
@@ -17,13 +20,16 @@ const initialState: MyOrdersState = {
   MyOrdersLoading: false,
   MyOrdersError: null,
   MyOrdersdata: null,
+  payRemainingAmountLoading: false,
+  payRemainingAmountError: null,
+  payRemainingAmountdata: null,
 };
 
 const MyOrdersSlice = createSlice({
   name: "MyOrders",
   initialState,
   reducers: {
-    fetchMyOrdersRequest: (state,_action) => {
+    fetchMyOrdersRequest: (state, _action) => {
       state.MyOrdersLoading = true;
       state.MyOrdersError = null;
       state.MyOrdersdata = null;
@@ -38,6 +44,25 @@ const MyOrdersSlice = createSlice({
       state.MyOrdersError = action.payload;
       state.MyOrdersdata = null;
     },
+    fetchpayRemainingAmountRequest: (state, _action) => {
+      state.payRemainingAmountLoading = true;
+      state.payRemainingAmountError = null;
+      state.payRemainingAmountdata = null;
+    },
+    fetchpayRemainingAmountSuccess: (state, action: PayloadAction<any>) => {
+      state.payRemainingAmountLoading = false;
+      state.payRemainingAmountdata = action.payload;
+      state.payRemainingAmountError = null;
+    },
+    fetchpayRemainingAmountFailure: (state, action: PayloadAction<string>) => {
+      state.payRemainingAmountLoading = false;
+      state.payRemainingAmountError = action.payload;
+      state.payRemainingAmountdata = null;
+    },
+    resetRemainingAmountSlice: (state) => {
+      state.payRemainingAmountLoading = false;
+      state.payRemainingAmountdata = null;
+    },
   },
 });
 
@@ -45,6 +70,10 @@ export const {
   fetchMyOrdersRequest,
   fetchMyOrdersSuccess,
   fetchMyOrdersFailure,
+  fetchpayRemainingAmountRequest,
+  fetchpayRemainingAmountSuccess,
+  fetchpayRemainingAmountFailure,
+  resetRemainingAmountSlice,
 } = MyOrdersSlice.actions;
 
 export default MyOrdersSlice.reducer;

@@ -4,30 +4,38 @@ import {
   fetchMyOrdersRequest,
   fetchMyOrdersSuccess,
   fetchMyOrdersFailure,
-
+  fetchpayRemainingAmountRequest,
+  fetchpayRemainingAmountSuccess,
+  fetchpayRemainingAmountFailure,
 } from "./slice";
-import {
-  getMyOrdersData,
-
-} from "../../service/api";
+import { getMyOrdersData,payRemainingAmount } from "../../service/api";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
 function* fetchMyOrdersSaga(action: PayloadAction<any>): SagaIterator {
   try {
-    const data: any = yield call(getMyOrdersData,action.payload);
+    const data: any = yield call(getMyOrdersData, action.payload);
     console.log("data in saga", data);
 
     yield put(fetchMyOrdersSuccess(data));
   } catch (error: any) {
-    yield put(
-      fetchMyOrdersFailure(error.message || "Something went wrong")
-    );
+    yield put(fetchMyOrdersFailure(error.message || "Something went wrong"));
   }
 }
 
 
+function* payRemainingAmountSaga(action: PayloadAction<any>): SagaIterator {
+  try {
+    const data: any = yield call(payRemainingAmount, action.payload);
+    console.log("data in saga", data);
+
+    yield put(fetchpayRemainingAmountSuccess(data));
+  } catch (error: any) {
+    yield put(fetchpayRemainingAmountFailure(error.message || "Something went wrong"));
+  }
+}
 
 export default function* ordersSaga(): SagaIterator {
   yield takeLatest(fetchMyOrdersRequest.type, fetchMyOrdersSaga);
-
+  yield takeLatest(fetchMyOrdersRequest.type, fetchMyOrdersSaga);
+  yield takeLatest(fetchpayRemainingAmountRequest.type, payRemainingAmountSaga);
 }

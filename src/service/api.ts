@@ -188,3 +188,8 @@ export async function getMyOrdersData(id:any){
   const response = await api.get(`/api/order/${id}`)
     return response.data; 
 }
+
+export async function payRemainingAmount(id:any){
+  const response = await api.post(`/api/order/remainPayment/${id}`)
+    return response.data; 
+}
