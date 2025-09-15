@@ -21,7 +21,7 @@ function* forgetPasswordSaga(action: {
     yield put(forgetPasswordSuccess(data));
   } catch (error: any) {
     yield put(
-      forgetPasswordFailure(error.message || "Failed to create forgetPassword")
+      forgetPasswordFailure(error.response.data.message || "Failed to create forgetPassword")
     );
   }
 }
@@ -33,7 +33,7 @@ function* resetSaga(action: { type: any; payload: any }): SagaIterator {
     yield put(resetSuccess(data));
   } catch (error: any) {
     yield put(
-      resetFailure(error.message || "Failed to create forgetPassword")
+      resetFailure(error.response.data.message || "Failed to create forgetPassword")
     );
   }
 }

@@ -1,12 +1,22 @@
 import { Card } from "antd";
 import { motion } from "framer-motion";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../../../redux/store";
+import { useNavigate } from "react-router-dom";
+import { fetchPackageDetailsRequest } from "../../Packages/slice";
 
 
 
 export default function BucketListAdventures() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const { data } = useSelector((state: RootState) => state.home);
+
+  const handleClick = (id:any) => {
+      dispatch(fetchPackageDetailsRequest(id))
+      navigate(`/packages/pck/${id}`)
+  }
 
   return (
     <div className="relative bg-transparent  px-6 md:px-20 text-center overflow-hidden">
@@ -26,10 +36,10 @@ export default function BucketListAdventures() {
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
-        className="text-4xl md:text-5xl font-extrabold text-[#1a2753] mb-6 text-left pt-18" // 🔹 added text-right
+        className="text-4xl md:text-5xl font-extrabold text-[#1a2753] mb-6 text-left pt-18 " // 🔹 added text-right
         style={{ fontFamily: "'Tiempos Text', serif" }}
       >
-      <b> Pack Your Bags, <br /> We&apos;ll Handle the Rest! </b>
+        <b> Pack Your Bags, <br /> We&apos;ll Handle the Rest! </b>
       </motion.h2>
 
       {/* Bucket List Adventures Section */}
@@ -61,7 +71,8 @@ export default function BucketListAdventures() {
                     transition={{ duration: 0.4 }}
                     src={item.images[0].url}
                     alt={item.title}
-                    className="w-full h-60 object-cover "
+                    className="w-full h-60 object-cover cursor-pointer"
+                    onClick={()=>handleClick(item._id)}
                   />
 
                   <motion.h4

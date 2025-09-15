@@ -14,7 +14,7 @@ function* signupSaga(action: { type: string; payload: { email: string; password:
     yield put(fetchUser()); // ✅ no hooks needed
 
   } catch (error: any) {
-    yield put(signupFailure(error.message || "signup failed"));
+    yield put(signupFailure(error.response.data.message || "signup failed"));
   }
 }
 

@@ -1,4 +1,4 @@
-import { Form, Input, Button, Rate, Spin, Upload } from "antd";
+import { Form, Input, Button, Rate, Upload } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { createReviewRequest } from "../slice";
 import type { RootState } from "../../../redux/store";
@@ -13,18 +13,18 @@ const CreateReview = () => {
   const { loading } = useSelector((state: RootState) => state.review);
   const [fileList, setFileList] = useState<any[]>([]);
 
-const onFinish = (values: any) => {
-  const payload = new FormData();
-  payload.append("username", values.username);
-  payload.append("message", values.message);
-  payload.append("star", values.star?.toString() || "1");
+  const onFinish = (values: any) => {
+    const payload = new FormData();
+    payload.append("username", values.username);
+    payload.append("message", values.message);
+    payload.append("star", values.star?.toString() || "1");
 
-  if (fileList.length > 0) {
-    payload.append("image", fileList[0].originFileObj); // must match multer field
-  }
+    if (fileList.length > 0) {
+      payload.append("image", fileList[0].originFileObj); // must match multer field
+    }
 
-  dispatch(createReviewRequest(payload));
-};
+    dispatch(createReviewRequest(payload));
+  };
 
 
 
@@ -79,7 +79,11 @@ const onFinish = (values: any) => {
             className="w-full bg-blue-600 hover:bg-blue-700"
             disabled={loading}
           >
-            {loading ? <Spin /> : "Submit Review"}
+            {loading ?
+ <div className="h-screen flex items-center justify-center">
+                        <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-gray-100"></div>
+                      </div>
+              : "Submit Review"}
           </Button>
         </Form.Item>
       </Form>

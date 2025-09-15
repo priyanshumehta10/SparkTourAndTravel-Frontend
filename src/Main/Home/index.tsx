@@ -11,10 +11,9 @@ export default function Home() {
   const fetchData = useRef(false);
   const { loadingPck, ReviewsLoading } = useSelector((state: RootState) => state.home);
 
-  const { user, isAuthenticated, loading } = useSelector(
+  const { loading } = useSelector(
     (state: RootState) => state.auth
   );
-  console.log("data in admin", user, isAuthenticated, loading);
   useEffect(() => {
     if (!fetchData.current) {
       fetchData.current = true;
@@ -33,8 +32,8 @@ export default function Home() {
           <MainHome />
           <HomeStatic />
           {
-            !ReviewsLoading && 
-          <HomeReviews />
+            !ReviewsLoading &&
+            <HomeReviews />
 
           }
         </>

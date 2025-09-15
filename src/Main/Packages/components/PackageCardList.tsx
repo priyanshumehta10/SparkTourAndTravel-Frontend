@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../../../redux/store";
-import { Spin } from "antd";
 import { fetchPackageDetailsRequest } from "../slice";
 import ImageCarousel from "./ImageCarousel";
 import { useNavigate } from "react-router-dom";
@@ -32,8 +31,8 @@ const PackageCardList = () => {
   if (PackagesByGroupLoading) {
     return (
       <div className="h-screen flex items-center justify-center bg-gray-100">
-        <Spin size="large" />
-      </div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
+        </div>  
     );
   }
 

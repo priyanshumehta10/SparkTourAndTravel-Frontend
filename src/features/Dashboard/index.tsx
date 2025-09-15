@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../../redux/store";
 import { fetchDashboardStatsRequest } from "./slice";
 import { Row, Col, Card, Statistic, Divider } from "antd";
-import { Pie, Column, Line } from "@ant-design/plots";
+import { Pie, Column } from "@ant-design/plots";
 
 export default function Dashboard() {
   const dispatch = useDispatch();
@@ -40,11 +40,6 @@ export default function Dashboard() {
   const bookingsByPackageData = stats?.bookings?.byPackage?.map(pkg => ({
     type: pkg.packageTitle || "Unknown",
     value: pkg.count || 0,
-  })) || [];
-
-  const bookingsByMonthData = stats?.bookings?.byMonth?.map(month => ({
-    month: `Month ${month.month}`,
-    count: month.count || 0,
   })) || [];
 
   const dividerStyle = { borderColor: "#fff" };
@@ -87,6 +82,7 @@ export default function Dashboard() {
                     content: (item: { type: string; value: number }) => `${item.type}: ${item.value}`,
                     style: { fill: "#fff" },
                   }}
+                  
                   color={["#2563eb", "#10b981"]}
                   interactions={[{ type: "element-active" }]}
                 />
@@ -113,26 +109,6 @@ export default function Dashboard() {
         )}
       </Row>
 
-      <Divider style={dividerStyle} />
-
-      {bookingsByMonthData.length > 0 && (
-        <Row gutter={16}>
-          <Col span={24}>
-            <Card title="Bookings per Month" style={cardStyle} headStyle={{ color: "#fff" }}>
-              <Line
-                data={bookingsByMonthData}
-                xField="month"
-                yField="count"
-                point={{ size: 5, shape: "diamond" }}
-                label={{ style: { fill: "#fff" } }}
-                xAxis={{ label: { style: { fill: "#fff" } } }}
-                yAxis={{ label: { style: { fill: "#fff" } } }}
-                color="#10b981"
-              />
-            </Card>
-          </Col>
-        </Row>
-      )}
     </div>
   );
 }

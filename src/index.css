@@ -209,7 +209,7 @@ button:focus-visible {
 /* Dark mode Dashboard */
 .dark-mode-dashboard {
   background-color: #374151; /* gray-800 */
-  color: #fff;
+  color: #fff !important;
   min-height: 100vh;
   padding: 1.5rem;
 }
@@ -254,31 +254,7 @@ button:focus-visible {
 }
 
 
-/* Divider */
-.dark-mode-dashboard .ant-divider-horizontal {
-  border-color: #fff !important;
-}
 
-/* Charts container inside cards */
-.dark-mode-dashboard .ant-card .ant-card-body {
-  background-color: #1f2937 !important;
-  color: #fff !important;
-}
-
-/* Optional: make tooltips in charts dark */
-.dark-mode-dashboard .g2-tooltip {
-  background-color: #111827 !important;
-  color: #fff !important;
-  border: 1px solid #fff !important;
-}
-.dark-mode-dashboard .g2-html-legend-item,
-.dark-mode-dashboard .g2-legend-list-item,
-.dark-mode-dashboard .g2-legend-title,
-.dark-mode-dashboard .g2-axis-label,
-.dark-mode-dashboard .g2-label {
-  fill: #fff !important; /* for SVG text */
-  color: #fff !important; /* for HTML-based legends */
-}
 .custom-dark-rate .ant-rate-star:not(.ant-rate-star-full) .ant-rate-star-second,
 .custom-dark-rate .ant-rate-star:not(.ant-rate-star-full) .ant-rate-star-first {
   color: #6b7280 !important; /* Tailwind gray-500 */

@@ -32,6 +32,7 @@ import RefundPolicy from "./Main/Refund";
 import PackageCardList from "./Main/Packages/components/PackageCardList";
 import PackageDetails from "./Main/Packages/components/PackageDetails";
 import BookingForm from "./Main/Packages/components/BookingForm";
+import MyOrders from "./Main/Order/index";
 
 export default function App() {
   const dispatch = useDispatch();
@@ -98,7 +99,7 @@ export default function App() {
         <Route element={<ProtectedRoute />}>
                   <Route path="/packages/pck/:id" element={<PackageDetails/>}/>
                   <Route path="/packages/pck/booking/:id" element={<BookingForm/>}/>
-
+                  <Route path="/orders" element= {<MyOrders/>}/>
         </Route>
       </Route>
 

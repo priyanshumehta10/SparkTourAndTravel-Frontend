@@ -12,6 +12,7 @@ import PackageGroups from "../features/PackagesGroup/saga";
 import InquirySaga from "../Main/Contact/saga";
 import forgetPasswordSaga from "../features/ResetPassword/saga";
 import PackageFrontSaga from "../Main/Packages/saga";
+import ordersSaga from "../Main/Order/saga";
 
 export default function* rootSaga() {
   yield all([
@@ -28,5 +29,6 @@ export default function* rootSaga() {
     InquirySaga(),
     forgetPasswordSaga(),
     PackageFrontSaga(),
+    ordersSaga(),
   ]);
 }

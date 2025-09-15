@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchPackageGroupRequest, fetchPackagesByGroupRequest } from "../slice";
 import type { RootState } from "../../../redux/store";
-import { Spin } from "antd";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 
@@ -37,12 +36,12 @@ const PackageGroupList = () => {
     }
   }, [dispatch]);
 
-const handlePackageGroup = (id: string) => {
-  console.log("Clicked package group id:", id);
-  // 👉 here you can navigate, dispatch Redux, or call an API
-  dispatch(fetchPackagesByGroupRequest(id))
-  navigate("/packages/pck")
-};
+  const handlePackageGroup = (id: string) => {
+    console.log("Clicked package group id:", id);
+    // 👉 here you can navigate, dispatch Redux, or call an API
+    dispatch(fetchPackagesByGroupRequest(id))
+    navigate("/packages/pck")
+  };
 
 
   const { PackageGroupLoading, PackageGroupdata } = useSelector(
@@ -51,9 +50,9 @@ const handlePackageGroup = (id: string) => {
 
   if (PackageGroupLoading) {
     return (
-      <div className="flex justify-center items-center h-64">
-        <Spin size="large" />
-      </div>
+        <div className="h-screen flex items-center justify-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
+        </div>       
     );
   }
 
@@ -86,18 +85,17 @@ const handlePackageGroup = (id: string) => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.4 }}
       >
-        {categories.map((cat, _index:number) => (
+        {categories.map((cat, _index: number) => (
           <motion.button
             key={cat}
             onClick={() => setActiveCategory(cat)}
             whileHover={{ scale: 1.05, backgroundColor: "#305BAB", color: "#fff" }}
             whileTap={{ scale: 0.95 }}
             transition={{ type: "spring", stiffness: 300 }}
-            className={`px-4 py-2 rounded-full font-medium cursor-pointer transition-all duration-300 ${
-              activeCategory === cat
+            className={`px-4 py-2 rounded-full font-medium cursor-pointer transition-all duration-300 ${activeCategory === cat
                 ? "bg-[#305BAB] text-white shadow-lg"
                 : "bg-[#C6DCFF] text-[#1a2753] hover:shadow-pink-300"
-            }`}
+              }`}
           >
             {cat}
           </motion.button>

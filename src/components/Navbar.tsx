@@ -83,6 +83,7 @@ export default function Navbar() {
               { path: "/packages", label: "Packages" },
               { path: "/about", label: "About" },
               { path: "/contact", label: "Contact" },
+              { path: "/orders", label:"My Order"},
             ].map((link) => (
               <Link
                 key={link.path}

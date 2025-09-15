@@ -12,6 +12,7 @@ import PackageGroupsSaga from "../features/PackagesGroup/slice.ts";
 import InquirySlice from "../Main/Contact/slice.ts";
 import forgetPasswordSlice from "../features/ResetPassword/slice.ts";
 import PackageFrontSlice from "../Main/Packages/slice.ts";
+import MyOrdersSlice from "../Main/Order/slice.ts";
 
 export default combineReducers({
   home: homeReducer,
@@ -27,4 +28,5 @@ export default combineReducers({
   Inquiry : InquirySlice,
   forgetPassword : forgetPasswordSlice,
   packageFront : PackageFrontSlice,
+  orders : MyOrdersSlice
 });

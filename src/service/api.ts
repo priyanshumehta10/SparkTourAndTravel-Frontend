@@ -13,9 +13,7 @@ export async function getReviews() {
 }
 
 export async function CreateInquiryData(data : any) {
-  const response = await api.post("/api/inquiries/",data); 
-  console.log("response",response);
-  
+  const response = await api.post("/api/inquiries/",data);     
   return response.data;
 }
 
@@ -184,4 +182,9 @@ export async function createOrder(data:any) {
 export async function confirmOrder(data:any) {
   const response = await api.post(`/api/order/confirmPayment`,data); 
   return response.data;
+}
+
+export async function getMyOrdersData(id:any){
+  const response = await api.get(`/api/order/${id}`)
+    return response.data; 
 }

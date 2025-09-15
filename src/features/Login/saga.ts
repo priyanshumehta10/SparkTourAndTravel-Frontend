@@ -14,7 +14,9 @@ function* loginSaga(action: { type: string; payload: { email: string; password: 
     yield put(fetchUser()); // ✅ no hooks needed
 
   } catch (error: any) {
-    yield put(loginFailure(error.message || "Login failed"));
+    console.log(error);
+    
+    yield put(loginFailure(error.response.data.message || "Login failed"));
   }
 }
 
