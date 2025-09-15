@@ -34,8 +34,12 @@ const loginSlice = createSlice({
       state.user = null;
       state.error = null;
     },
+    resetLoginError:(state) => {
+      state.error = null;
+
+    }
   },
 });
 
-export const { loginRequest, loginSuccess, loginFailure, logout } = loginSlice.actions;
+export const { loginRequest, loginSuccess, loginFailure, logout, resetLoginError } = loginSlice.actions;
 export default loginSlice.reducer;

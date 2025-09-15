@@ -61,10 +61,14 @@ export default function SignUpModal() {
 
     const handleClose = () => {
         navigate("/");
+        dispatch(signupReset())
+
     };
 
     const handleLogin = () => {
         navigate("/login");
+        dispatch(signupReset())
+
     };
 
     return (

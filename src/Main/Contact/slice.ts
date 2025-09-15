@@ -2,16 +2,16 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 interface InquiryState {
-  data: any[];
-  loading: boolean;
-  error: string | null;
+  InquiryData: any;
+  loadingContact: boolean;
+  errorContact: string | null;
   created: boolean;
 }
 
 const initialState: InquiryState = {
-  data: [],
-  loading: false,
-  error: null,
+  InquiryData: null,
+  loadingContact: false,
+  errorContact: null,
   created: false,
 };
 
@@ -19,27 +19,28 @@ const InquirySlice = createSlice({
   name: "Inquiry",
   initialState,
   reducers: {
-    createInquiryRequest: (state, _action: PayloadAction<FormData>) => {
-      state.loading = true;
-      state.error = null;
+    createInquiryRequest: (state, _action: PayloadAction<any>) => {
+      state.loadingContact = true;
+      state.errorContact = null;
       state.created = false;
+      state.InquiryData = null;
     },
     createInquirySuccess: (state, action: PayloadAction<any>) => {
-      state.loading = false;
-      if (state.data) {
-        state.data = [action.payload, ...state.data]; // prepend new Inquiry
-      }
-      state.error = null;
+      state.loadingContact = false;
+      state.InquiryData = action.payload, // prepend new Inquiry
+      state.errorContact = null;
       state.created = true;
     },
     createInquiryFailure: (state, action: PayloadAction<any>) => {
-      state.loading = false;
-      state.error = action.payload;
+      state.loadingContact = false;
+      state.errorContact = action.payload;
       state.created = false;
+      state.InquiryData = null;
     },
 
     resetCreated: (state) => {
       state.created = false;
+      state.InquiryData = null;
     },
   },
 });

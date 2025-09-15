@@ -13,8 +13,10 @@ import {
 function* createInquirySaga(action: { type: any; payload: FormData }): SagaIterator {
   try {
     const data: any = yield call(CreateInquiryData, action.payload);
+    console.log(data);
+    
     // API should return the created Inquiry object
-    yield put(createInquirySuccess(data));
+    yield put(createInquirySuccess(data.message));
   } catch (error: any) {
     console.log(error);
     

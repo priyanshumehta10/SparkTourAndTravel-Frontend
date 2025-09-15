@@ -39,6 +39,8 @@ const signupSlice = createSlice({
     signupReset: (state) => {
       state.loading = false;
       state.signupConfirmation = false;
+            state.error = null;
+
     },
     logout: (state) => {
       state.user = null;

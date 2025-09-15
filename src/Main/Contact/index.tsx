@@ -1,17 +1,17 @@
-import { Form, Input, Button, Card, Spin, Alert } from "antd";
+import { Form, Input, Button, Card, Alert } from "antd";
 import { motion } from "framer-motion";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { createInquiryRequest } from "./slice";
+import { createInquiryRequest, resetCreated } from "./slice";
 import type { RootState } from "../../redux/store";
 
 export default function ContactPage() {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
-  const { loading, created, error } = useSelector((state: RootState) => state.Inquiry);
+  const { loadingContact, created, errorContact, InquiryData  } = useSelector((state: RootState) => state.Inquiry);
 
   const onFinish = (values: any) => {
-    console.log("Contact Form Data:", values);
+    console.log("Contact Form InquiryData:", values);
     dispatch(createInquiryRequest(values));
   };
 
@@ -22,6 +22,16 @@ export default function ContactPage() {
     }
   }, [created, form]);
 
+    useEffect(() => {
+    if (created && InquiryData) {
+      const timer = setTimeout(() => {
+        dispatch(resetCreated());
+      }, 5000); // ⏳ hide after 5 seconds
+
+      return () => clearTimeout(timer); // cleanup
+    }
+  }, [created, InquiryData, dispatch]);
+
   return (
     <div className="min-h-screen bg-white flex items-center justify-center p-6">
       <motion.div
@@ -30,10 +40,19 @@ export default function ContactPage() {
         transition={{ duration: 0.6 }}
         className="w-full max-w-2xl"
       >
-        {error && (
+        {errorContact && (
           <Alert
-            message={error}
+            message={errorContact}
             type="error"
+            showIcon
+            className="mt-2 rounded-lg"
+          />
+        )}
+
+        {created && InquiryData && (
+          <Alert
+            message={InquiryData}
+            type="success"
             showIcon
             className="mt-2 rounded-lg"
           />
@@ -104,7 +123,11 @@ export default function ContactPage() {
                   borderColor: "#305BAB",
                 }}
               >
-                {loading ? <Spin /> : "Send Message"}
+                {loadingContact ?
+                  <div className="h-screen flex items-center justify-center">
+                    <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-gray-100"></div>
+                  </div>
+                  : "Send Message"}
               </Button>
             </div>
           </Form>

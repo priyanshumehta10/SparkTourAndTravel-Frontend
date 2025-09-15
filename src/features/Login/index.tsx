@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../../redux/store";
-import { loginRequest } from "./slice";
+import { loginRequest , resetLoginError } from "./slice";
 import { Input, Button, Modal, message } from "antd";
 import { CloseCircleFilled, EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
 import Group from "../../assets/Group.png";
@@ -17,6 +17,7 @@ export default function LoginModal() {
 
   const handleForgotPassword = () => {
     navigate("/forgetPassword")
+    dispatch(resetLoginError());
   };
   const validatePassword = (password: string) => {
     if (password === "123") return true;
@@ -24,6 +25,8 @@ export default function LoginModal() {
   };
   const handleSignUp = () => {
     navigate("/signup")
+        dispatch(resetLoginError());
+
   };
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,10 +40,15 @@ export default function LoginModal() {
       );
       return;
     }
+        dispatch(resetLoginError());
+
     dispatch(loginRequest({ email, password }));
+    
   };
   const handleClose = () => {
     navigate("/")
+        dispatch(resetLoginError());
+
   };
   return (
     <Modal

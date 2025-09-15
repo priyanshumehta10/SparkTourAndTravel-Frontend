@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Input, Button, Modal, message, Spin, Alert } from "antd";
+import { Input, Button, Modal, message, Alert } from "antd";
 import { CloseCircleFilled, EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
 import Group from "../../assets/Group.png";
 import { useNavigate } from "react-router-dom";
@@ -32,7 +32,7 @@ export default function ForgotPasswordModal() {
     }
 
     dispatch(forgetPasswordRequest({ "email": email }));
-
+    dispatch(resetCreated());
   };
 
   useEffect(() => {
@@ -64,6 +64,7 @@ export default function ForgotPasswordModal() {
     message.success("Password reset successful! Please login with new credentials.");
     dispatch(resetRequest({ "email": email, "otp": otp, "newPassword": newPassword }));
     navigate("/login");
+    dispatch(resetCreated());
   };
 
   return (
@@ -77,12 +78,12 @@ export default function ForgotPasswordModal() {
       bodyStyle={{ padding: 0 }}
     >
       {
-        error && 
+        error &&
         <Alert
-        message={error}
-        type="error"
-        showIcon
-        className="mt-2 rounded-lg mx-4"
+          message={error}
+          type="error"
+          showIcon
+          className="mt-2 rounded-lg mx-4"
         />
       }
       <div className="flex flex-col md:flex-row min-h-[500px] relative">
@@ -122,7 +123,11 @@ export default function ForgotPasswordModal() {
                     disabled={loading}
                     className="bg-white text-blue-900 hover:bg-gray-100 font-semibold"
                   >
-                    {loading ? <Spin /> : "Send OTP"}
+                    {loading ?
+                      <div className="h-screen flex items-center justify-center">
+                        <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-gray-100"></div>
+                      </div>
+                      : "Send OTP"}
                   </Button>
 
                 </div>
@@ -189,7 +194,11 @@ export default function ForgotPasswordModal() {
                   block
                   className="bg-white text-blue-900 hover:bg-gray-100 font-semibold"
                 >
-                  {loadingReset ? <Spin/> :"Reset Password"}
+                  {loadingReset ?
+                    <div className="h-screen flex items-center justify-center">
+                        <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-gray-100"></div>
+                      </div> :
+                     "Reset Password"}
                 </Button>
               </form>
             )}
