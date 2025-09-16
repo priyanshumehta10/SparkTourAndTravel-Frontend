@@ -77,18 +77,6 @@ const PackageDetails: React.FC = () => {
         {PackageDetailsdata.description}
       </p>
 
-      {/* Tags */}
-      <div className="flex flex-wrap gap-2 mb-8">
-        {PackageDetailsdata.tags?.map((tag: string, i: number) => (
-          <span
-            key={i}
-            className="px-3 py-1 text-sm bg-pink-100 text-pink-600 font-medium rounded-full shadow-sm"
-          >
-            {tag}
-          </span>
-        ))}
-      </div>
-
       {/* Image Gallery */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 mb-10">
         {PackageDetailsdata.images?.map((img: any) => (

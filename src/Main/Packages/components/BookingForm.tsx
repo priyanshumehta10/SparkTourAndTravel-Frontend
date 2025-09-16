@@ -19,6 +19,7 @@ const BookingForm: React.FC = () => {
   const { createOrderdata, confirmOrderdata } = useSelector(
     (state: RootState) => state.packageFront
   );
+console.log(packageData);
 
   const [people, setPeople] = useState([{ name: "", age: "", gender: "" }]);
   const [contact, setContact] = useState({ mobile: "", email: "" });
@@ -27,7 +28,10 @@ const BookingForm: React.FC = () => {
     setPeople([...people, { name: "", age: "", gender: "" }]);
 
   // Determine if special discount applies based on current people length
-  const isSpecial = people.length >= 4 && packageData?.finalSpecialPrice > 0;
+const isSpecial =
+  people.length >= 4 &&
+  packageData?.specialDiscount > 0 &&
+  packageData?.finalSpecialPrice > 0;
 
   const payableAmount = useMemo(() => {
     if (!packageData) return 0;

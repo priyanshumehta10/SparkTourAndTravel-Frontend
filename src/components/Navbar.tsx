@@ -28,7 +28,7 @@ export default function Navbar() {
       <div className="w-full bg-white text-[#1a2753]">
         <div className="max-w-7xl mx-auto flex items-center justify-between px-6 ">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2">
+          <Link to="/" className="logo flex items-center space-x-2 hover:no-underline hover:text-inherit" >
             <img src={sparksLogo} alt="Logo" className="h-24 w-auto" />
 
             <div className="flex flex-col">
