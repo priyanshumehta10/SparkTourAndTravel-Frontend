@@ -99,7 +99,7 @@ export default function App() {
         <Route element={<ProtectedRoute />}>
                   <Route path="/packages/pck/:id" element={<PackageDetails/>}/>
                   <Route path="/packages/pck/booking/:id" element={<BookingForm/>}/>
-                  <Route path="/orders" element= {<MyOrders/>}/>
+                  <Route path="/bookings" element= {<MyOrders/>}/>
         </Route>
       </Route>
 
