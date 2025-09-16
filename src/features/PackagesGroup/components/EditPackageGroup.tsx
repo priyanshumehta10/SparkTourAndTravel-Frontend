@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Form, Input, Button, Upload, message } from "antd";
+import { Form, Input, Button, Upload, message, Select } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -17,15 +17,19 @@ const EditPackageGroup = () => {
 
   // ✅ fileList is properly typed now
   const [fileList, setFileList] = useState<UploadFile[]>([]);
-
+  const { tagData } = useSelector(
+    (state: RootState) => state.packages
+  );
   const { dataPerGroup, loadingPerGroup, error, edited } = useSelector(
     (state: RootState) => state.packageGroups
   );
 
   useEffect(() => {
     if (dataPerGroup) {
-      form.setFieldsValue({ name: dataPerGroup.name });
-
+      form.setFieldsValue({
+        name: dataPerGroup.name,
+        tags: dataPerGroup.tags
+      });
       setFileList(
         dataPerGroup.photo
           ? [
@@ -49,6 +53,13 @@ const EditPackageGroup = () => {
     if (!dataPerGroup) return;
 
     const formData = new FormData();
+
+    Object.entries(values).forEach(([key, value]) => {
+      if (key === "tags" && Array.isArray(value)) {
+        formData.append("tags", JSON.stringify(value));
+      }
+    });
+
     formData.append("name", values.name);
 
     const existingImages: { url: string; public_id: string }[] = [];
@@ -103,6 +114,18 @@ const EditPackageGroup = () => {
           rules={[{ required: true, message: "Please enter the group title" }]}
         >
           <Input className="bg-gray-800 text-white placeholder-gray-400" />
+        </Form.Item>
+
+        <Form.Item
+          label={<span className="text-white">Tags</span>}
+          name="tags"
+        >
+          <Select
+            mode="multiple"
+            placeholder="Select tags"
+            className="w-full bg-black text-white"
+            options={tagData?.map((tag) => ({ label: tag, value: tag }))}
+          />
         </Form.Item>
 
         <Form.Item label={<span className="text-white">Photo</span>} required>
