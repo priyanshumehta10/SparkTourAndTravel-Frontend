@@ -8,18 +8,18 @@ export default function AdminLayout() {
 
   return (
     <div className="flex min-h-screen bg-gray-700">
-      {/* Sidebar for larger screens */}
+      {/* Sidebar (Desktop) */}
       <div className="hidden md:block w-64 h-screen fixed">
         <Sidebar />
       </div>
 
-      {/* Mobile sidebar (toggleable) */}
+      {/* Sidebar (Mobile) */}
       <div
-        className={`fixed inset-y-0 left-0 z-50 w-64 transform bg-gray-800 transition-transform duration-300 md:hidden ${
+        className={`fixed inset-y-0 left-0 z-50 w-64 transform transition-transform duration-300 md:hidden ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        <div className="flex justify-end p-2">
+        <div className="flex justify-end p-2 bg-gray-800">
           <button className="text-white" onClick={() => setIsOpen(false)}>
             <CloseOutlined style={{ fontSize: 24 }} />
           </button>
@@ -27,7 +27,7 @@ export default function AdminLayout() {
         <Sidebar />
       </div>
 
-      {/* Backdrop (click to close) */}
+      {/* Backdrop (Mobile) */}
       {isOpen && (
         <div
           className="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"

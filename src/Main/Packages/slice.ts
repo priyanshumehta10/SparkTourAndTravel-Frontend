@@ -20,6 +20,9 @@ export interface PackageGroupState {
   confirmOrderLoading: boolean;
   confirmOrderError: string | null;
   confirmOrderdata: any;
+  filterPackageGroupLoading:boolean;
+  filterPackageGroupError:string|null;
+  filterPackageGroupdata:any;
 }
 
 const initialState: PackageGroupState = {
@@ -41,6 +44,9 @@ const initialState: PackageGroupState = {
   confirmOrderLoading: false,
   confirmOrderError: null,
   confirmOrderdata: null,
+  filterPackageGroupLoading:false,
+  filterPackageGroupError:null,
+  filterPackageGroupdata:null,
 };
 
 const PackageGroupSlice = createSlice({
@@ -61,6 +67,21 @@ const PackageGroupSlice = createSlice({
       state.PackageGroupLoading = false;
       state.PackageGroupError = action.payload;
       state.PackageGroupdata = null;
+    },
+    fetchFilterPackageGroupRequest: (state, _action: PayloadAction<any>) => {
+      state.filterPackageGroupLoading = true;
+      state.filterPackageGroupError = null;
+      state.filterPackageGroupdata = null;
+    },
+    fetchFilterPackageGroupSuccess: (state, action: PayloadAction<any>) => {
+      state.filterPackageGroupLoading = false;
+      state.filterPackageGroupdata = action.payload;
+      state.filterPackageGroupError = null;
+    },
+    fetchFilterPackageGroupFailure: (state, action: PayloadAction<string>) => {
+      state.filterPackageGroupLoading = false;
+      state.filterPackageGroupError = action.payload;
+      state.filterPackageGroupdata = null;
     },
     fetchPackagesByGroupRequest: (state, _action: PayloadAction<string>) => {
       state.PackagesByGroupLoading = true;
@@ -154,7 +175,9 @@ export const {
   confirmOrderFailure,
   resetCreateBookSlice,
   resetConfirmBookSlice,
-  
+  fetchFilterPackageGroupSuccess,
+  fetchFilterPackageGroupRequest,
+  fetchFilterPackageGroupFailure
 } = PackageGroupSlice.actions;
 
 export default PackageGroupSlice.reducer;

@@ -135,6 +135,11 @@ export async function getPackageGroupsData() {
   return response.data; 
 }
 
+export async function getFilterPackageGroupsData(data:any) {
+  const response = await api.post(`/api/packageGroup/Tag`,data); 
+  return response.data; 
+}
+
 export async function getPackagesByGroupsData(id:string){
   const response = await api.get(`api/packages/group/${id}`)
     return response.data; 
@@ -192,4 +197,9 @@ export async function getMyOrdersData(id:any){
 export async function payRemaining(data:any) {
   const response = await api.post(`/api/order/remainPayment/${data}`); 
   return response.data;
+}
+
+export async function getAdminOrdersData(){
+  const response = await api.get(`/api/order/admin`)
+    return response.data; 
 }
