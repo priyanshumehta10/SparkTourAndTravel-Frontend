@@ -4,6 +4,7 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 interface PackageGroupData {
   _id: string;
   name: string;
+  tags:any;
   photo: {
     url: string;
     public_id: string;

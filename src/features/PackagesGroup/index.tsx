@@ -3,12 +3,13 @@ import { Card, Button, Popconfirm } from "antd";
 import { EditOutlined, DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../../redux/store";
-import { 
-    fetchPackageGroupsRequest, 
-    resetCreatedGroup, 
-    deletePackageGroupRequest, 
-    fetchPackageGroupRequest 
+import {
+    fetchPackageGroupsRequest,
+    resetCreatedGroup,
+    deletePackageGroupRequest,
+    fetchPackageGroupRequest,
 } from "./slice";
+import {fetchAllTagRequest} from "../Packages/slice"
 import { useNavigate } from "react-router-dom";
 
 const PackageGroups = () => {
@@ -34,6 +35,8 @@ const PackageGroups = () => {
         if (!fetchData.current || created) {
             fetchData.current = true;
             dispatch(fetchPackageGroupsRequest());
+            dispatch(fetchAllTagRequest());
+
             if (created) dispatch(resetCreatedGroup());
         }
     }, [created, dispatch]);
@@ -59,7 +62,7 @@ const PackageGroups = () => {
                     </Button>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {data?.map((group:any) => (
+                    {data?.map((group: any) => (
                         <Card
                             key={group._id}
                             className="bg-gray-800 border border-white rounded-xl shadow-lg text-white"
