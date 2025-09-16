@@ -33,6 +33,7 @@ import PackageCardList from "./Main/Packages/components/PackageCardList";
 import PackageDetails from "./Main/Packages/components/PackageDetails";
 import BookingForm from "./Main/Packages/components/BookingForm";
 import MyOrders from "./Main/Order/index";
+import Booking from "./features/Bookings/index"
 
 export default function App() {
   const dispatch = useDispatch();
@@ -41,6 +42,12 @@ export default function App() {
   console.log(user, loading);
   const navigate = useNavigate();
   const location = useLocation();
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    // 👉 use "smooth" instead of "instant" if you want animation
+  }, [location.pathname]);
+
+
 
   useEffect(() => {
     if (!loading && isAuthenticated) {
@@ -67,6 +74,8 @@ export default function App() {
     }
   }, [dispatch]);
 
+
+
   if (loading) {
     return (
       <div className="h-screen flex items-center justify-center bg-gray-100">
@@ -74,6 +83,7 @@ export default function App() {
       </div>
     );
   }
+
 
   return (
     <Routes>
@@ -91,15 +101,15 @@ export default function App() {
           <Route path="/terms" element={<TermsConditions />} />
           <Route path="/packages" element={<PackagesFront />} />
           <Route path="/refundPolicy" element={<RefundPolicy />} />
-          <Route path="/packages/pck" element={<PackageCardList/>}/>
+          <Route path="/packages/pck" element={<PackageCardList />} />
 
         </Route>
 
         {/* Logged-in only pages */}
         <Route element={<ProtectedRoute />}>
-                  <Route path="/packages/pck/:id" element={<PackageDetails/>}/>
-                  <Route path="/packages/pck/booking/:id" element={<BookingForm/>}/>
-                  <Route path="/bookings" element= {<MyOrders/>}/>
+          <Route path="/packages/pck/:id" element={<PackageDetails />} />
+          <Route path="/packages/pck/booking/:id" element={<BookingForm />} />
+          <Route path="/bookings" element={<MyOrders />} />
         </Route>
       </Route>
 
@@ -116,6 +126,8 @@ export default function App() {
           <Route path="/admin/packageGroups" element={<PackageGroups />} />
           <Route path="/admin/packageGroups/create" element={<CreatePackageGroups />} />
           <Route path="/admin/packageGroups/edit" element={<EditPackageGroups />} />
+          <Route path="/admin/booking" element={<Booking />} />
+
         </Route>
       </Route>
     </Routes>

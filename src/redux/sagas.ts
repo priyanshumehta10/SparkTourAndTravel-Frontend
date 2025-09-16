@@ -13,7 +13,7 @@ import InquirySaga from "../Main/Contact/saga";
 import forgetPasswordSaga from "../features/ResetPassword/saga";
 import PackageFrontSaga from "../Main/Packages/saga";
 import ordersSaga from "../Main/Order/saga";
-
+import adminOrdersSaga from "../features/Bookings/saga"
 export default function* rootSaga() {
   yield all([
     homeSaga(),
@@ -30,5 +30,6 @@ export default function* rootSaga() {
     forgetPasswordSaga(),
     PackageFrontSaga(),
     ordersSaga(),
+    adminOrdersSaga()
   ]);
 }
