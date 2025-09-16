@@ -205,7 +205,7 @@ const MyOrders = () => {
     <div className="p-6">
       <Card className="shadow-lg rounded-2xl overflow-hidden">
         <Title level={3} className="!mb-6 text-gray-800">
-          My Orders
+          My Bookings
         </Title>
 
         {MyOrdersLoading ? (
