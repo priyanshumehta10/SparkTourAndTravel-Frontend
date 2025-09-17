@@ -1,8 +1,8 @@
 import { useEffect, useRef } from "react";
-import { Table, Tag, Card, Typography, Spin, Modal } from "antd";
+import { Table, Tag, Card, Typography, Modal } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchMyOrdersRequest, resetRemainingAmountSlice , fetchpayRemainingAmountRequest} from "./slice";
+import { fetchMyOrdersRequest, resetRemainingAmountSlice, fetchpayRemainingAmountRequest } from "./slice";
 import { confirmOrderRequest } from "../Packages/slice";
 import type { RootState } from "../../redux/store";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
@@ -149,7 +149,7 @@ const MyOrders = () => {
         if (status === "partial") color = "orange";
         if (status === "pending") color = "red";
         if (status === "cancel") color = "grey";
-        return <Tag color={color}>{status.toUpperCase()}</Tag>;
+        return <Tag color={color}>{status == "pending" ? "FAILED" : status.toUpperCase()}</Tag>;
       },
     },
     {
@@ -161,7 +161,7 @@ const MyOrders = () => {
     {
       title: "Actions",
       key: "actions",
-      width: "15%",
+      width: "20%",
       render: (_: any, record: Booking) => {
         const today = new Date();
         const tripDate = new Date(record.startingDate);
@@ -175,8 +175,25 @@ const MyOrders = () => {
           );
         }
 
+
+        if (record.paymentStatus === "pending") {
+          return (
+            <span className="text-gray-400 italic">
+              Payment Failed
+            </span>
+          );
+        }
+
         return (
           <div className="flex gap-2">
+             {record.paymentStatus !== "cancel" && (
+              <button
+                className="px-3 py-1 !bg-red-600 text-white rounded-md"
+                onClick={() => handleCancel(record._id)}
+              >
+                Cancel
+              </button>
+            )}
             {record.paymentType === "50" &&
               record.paymentStatus === "partial" && (
                 <button
@@ -186,15 +203,7 @@ const MyOrders = () => {
                   Pay Remaining
                 </button>
               )}
-
-            {record.paymentStatus !== "cancel" && (
-              <button
-                className="px-3 py-1 !bg-red-600 text-white rounded-md"
-                onClick={() => handleCancel(record._id)}
-              >
-                Cancel
-              </button>
-            )}
+           
           </div>
         );
       },
@@ -209,8 +218,8 @@ const MyOrders = () => {
         </Title>
 
         {MyOrdersLoading ? (
-          <div className="flex justify-center items-center py-10">
-            <Spin size="large" />
+          <div className="h-screen flex items-center justify-center bg-gray-100">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
           </div>
         ) : (
           <div className="overflow-x-auto">
@@ -223,7 +232,7 @@ const MyOrders = () => {
               scroll={{ x: true }}
               rowClassName={(record) => {
                 const tripDate = new Date(record.startingDate);
-                return tripDate < new Date() ? "bg-gray-100 text-gray-400" : "";
+                return tripDate < new Date() ? "bg-gray-100 text-gray-400" : record.paymentStatus === "pending"? "bg-gray-100 text-gray-400" : "";
               }}
             />
           </div>
