@@ -200,6 +200,6 @@ export async function payRemaining(data:any) {
 }
 
 export async function getAdminOrdersData(){
-  const response = await api.get(`/api/order/admin`)
+  const response = await api.get(`/api/order/admin/get`)
     return response.data; 
 }
