@@ -26,7 +26,7 @@ const OrdersSlice = createSlice({
     },
     fetchOrdersSuccess: (state, action: PayloadAction<any>) => {
       state.loading = false;
-      state.OrdersData = action.payload.data;
+      state.OrdersData = action.payload.bookings;
       state.error = null;
     },
     fetchOrdersFailure: (state, action: PayloadAction<string>) => {
