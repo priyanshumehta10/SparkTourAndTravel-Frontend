@@ -203,3 +203,13 @@ export async function getAdminOrdersData(){
   const response = await api.get(`/api/order/admin/get`)
     return response.data; 
 }
+
+export async function CancelRequest(data:any) {
+  const response = await api.post(`/api/order/cancelRequest`,data); 
+  return response.data;
+}
+
+export async function confirmCancel(data:any) {
+  const response = await api.post(`/api/order/cancelConfirm`,data); 
+  return response.data;
+}

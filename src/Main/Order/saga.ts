@@ -7,8 +7,11 @@ import {
   fetchpayRemainingAmountRequest,
   fetchpayRemainingAmountSuccess,
   fetchpayRemainingAmountFailure,
+  fetchCancel,
+  fetchCancelRequestSuccess,
+  fetchCancelRequestFailure,
 } from "./slice";
-import { getMyOrdersData, payRemaining } from "../../service/api";
+import { getMyOrdersData, payRemaining,CancelRequest } from "../../service/api";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
 function* fetchMyOrdersSaga(action: PayloadAction<any>): SagaIterator {
@@ -35,10 +38,25 @@ function* fetchpayRemainingAmount(action: PayloadAction<any>): SagaIterator {
   }
 }
 
+function* fetchCancelRequest(
+  action: PayloadAction<{ bookingId: string; reason: string }>
+): SagaIterator {
+  try {
+    const data: any = yield call(CancelRequest, action.payload);
+
+    yield put(fetchCancelRequestSuccess(data));
+  } catch (error: any) {
+    yield put(
+      fetchCancelRequestFailure(error.message || "Something went wrong")
+    );
+  }
+}
+
 export default function* ordersSaga(): SagaIterator {
   yield takeLatest(fetchMyOrdersRequest.type, fetchMyOrdersSaga);
   yield takeLatest(
     fetchpayRemainingAmountRequest.type,
     fetchpayRemainingAmount
   );
+  yield takeLatest(fetchCancel.type, fetchCancelRequest);
 }

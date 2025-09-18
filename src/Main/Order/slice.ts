@@ -10,7 +10,10 @@ export interface MyOrdersState {
   MyOrdersdata: any;
   payRemainingAmountLoading: boolean;
   payRemainingAmountError: any;
-  payRemainingAmountdata : string | null;
+  payRemainingAmountdata: string | null;
+  cancelRequestLoading: boolean;
+cancelRequestError: any;
+cancelRequestData: any;
 
 }
 
@@ -21,9 +24,12 @@ const initialState: MyOrdersState = {
   MyOrdersLoading: false,
   MyOrdersError: null,
   MyOrdersdata: null,
-    payRemainingAmountLoading : false,
-  payRemainingAmountError : null,
-  payRemainingAmountdata : null,
+  payRemainingAmountLoading: false,
+  payRemainingAmountError: null,
+  payRemainingAmountdata: null,
+  cancelRequestLoading: false,
+cancelRequestError: null,
+cancelRequestData: null,
 
 };
 
@@ -31,7 +37,7 @@ const MyOrdersSlice = createSlice({
   name: "MyOrders",
   initialState,
   reducers: {
-    fetchMyOrdersRequest: (state,_action) => {
+    fetchMyOrdersRequest: (state, _action) => {
       state.MyOrdersLoading = true;
       state.MyOrdersError = null;
       state.MyOrdersdata = null;
@@ -46,7 +52,7 @@ const MyOrdersSlice = createSlice({
       state.MyOrdersError = action.payload;
       state.MyOrdersdata = null;
     },
-    fetchpayRemainingAmountRequest: (state,_action) => {
+    fetchpayRemainingAmountRequest: (state, _action) => {
       state.payRemainingAmountLoading = true;
       state.payRemainingAmountError = null;
       state.payRemainingAmountdata = null;
@@ -61,11 +67,28 @@ const MyOrdersSlice = createSlice({
       state.payRemainingAmountError = action.payload;
       state.payRemainingAmountdata = null;
     },
+    // inside your slice
+    fetchCancel: (state, _action: PayloadAction<any>) => {
+      state.cancelRequestLoading = true;
+      state.cancelRequestError = null;
+      state.cancelRequestData = null;
+    },
+    fetchCancelRequestSuccess: (state, action: PayloadAction<any>) => {
+      state.cancelRequestLoading = false;
+      state.cancelRequestData = action.payload;
+      state.cancelRequestError = null;
+    },
+    fetchCancelRequestFailure: (state, action: PayloadAction<any>) => {
+      state.cancelRequestLoading = false;
+      state.cancelRequestError = action.payload;
+      state.cancelRequestData = null;
+    },
+
     resetRemainingAmountSlice: (state) => {
       state.payRemainingAmountLoading = false;
       state.payRemainingAmountError = null;
       state.payRemainingAmountdata = null;
-    }
+    },
   },
 });
 
@@ -76,7 +99,10 @@ export const {
   fetchpayRemainingAmountRequest,
   fetchpayRemainingAmountSuccess,
   fetchpayRemainingAmountFailure,
-  resetRemainingAmountSlice
+  resetRemainingAmountSlice,
+  fetchCancel,
+  fetchCancelRequestSuccess,
+  fetchCancelRequestFailure
 } = MyOrdersSlice.actions;
 
 export default MyOrdersSlice.reducer;
