@@ -1,8 +1,8 @@
 import { useEffect, useRef } from "react";
-import { Table, Tag, Card, Typography, Modal } from "antd";
+import { Table, Tag, Card, Typography, Modal, Input } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchMyOrdersRequest, resetRemainingAmountSlice, fetchpayRemainingAmountRequest } from "./slice";
+import { fetchMyOrdersRequest, resetRemainingAmountSlice, fetchpayRemainingAmountRequest ,fetchCancel} from "./slice";
 import { confirmOrderRequest } from "../Packages/slice";
 import type { RootState } from "../../redux/store";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
@@ -31,6 +31,7 @@ interface Booking {
   paymentStatus: "pending" | "partial" | "paid" | "cancel";
   startingDate: string;
   bookedAt: string;
+  cancelRequest:any;
 }
 
 const MyOrders = () => {
@@ -44,21 +45,45 @@ const MyOrders = () => {
     dispatch(fetchpayRemainingAmountRequest(bookingId));
   };
 
-  const handleCancel = (bookingId: string) => {
-    confirm({
-      title: "Do you really want to cancel?",
-      icon: <ExclamationCircleOutlined />,
-      content:
-        "This action cannot be undone. Please read our refund policy before canceling.",
-      okText: "Yes, Cancel",
-      okType: "danger",
-      cancelText: "No, Keep Booking",
-      onOk() {
-        console.log("Booking canceled:", bookingId);
-        // dispatch(cancelBookingRequest(bookingId))  <-- if you have an API
-      },
-    });
-  };
+const handleCancel = (bookingId: string) => {
+  let reason = "";
+
+  confirm({
+    title: "Do you really want to cancel?",
+    icon: <ExclamationCircleOutlined />,
+    content: (
+      <div>
+        <p>
+          This action cannot be undone. Please read our refund policy before
+          canceling.
+        </p>
+        <Input.TextArea
+          placeholder="Enter cancellation reason"
+          rows={3}
+          onChange={(e) => {
+            reason = e.target.value;
+          }}
+        />
+      </div>
+    ),
+    okText: "Yes, Cancel",
+    okType: "danger",
+    cancelText: "No, Keep Booking",
+    async onOk() {
+      if (!reason.trim()) {
+        Modal.error({
+          title: "Reason required",
+          content: "Please provide a reason before cancelling.",
+        });
+        throw new Error("Reason is required"); // prevent closing modal
+      }
+
+      console.log("Booking canceled:", bookingId, "Reason:", reason);
+
+      dispatch(fetchCancel({ bookingId, reason }))
+    },
+  })}
+
 
   useEffect(() => {
     if (!fetchData.current) {
@@ -184,6 +209,14 @@ const MyOrders = () => {
           );
         }
 
+        if (record?.cancelRequest?.confirmed) {
+          return (
+            <span className="text-gray-400 italic">
+              Booking Cancelled
+            </span>
+          );
+        }
+
         return (
           <div className="flex gap-2">
              {record.paymentStatus !== "cancel" && (
@@ -232,7 +265,7 @@ const MyOrders = () => {
               scroll={{ x: true }}
               rowClassName={(record) => {
                 const tripDate = new Date(record.startingDate);
-                return tripDate < new Date() ? "bg-gray-100 text-gray-400" : record.paymentStatus === "pending"? "bg-gray-100 text-gray-400" : "";
+                return tripDate < new Date() ? "bg-gray-100 text-gray-400" : record.paymentStatus === "pending"? "bg-gray-100 text-gray-400" : record?.cancelRequest?.confirmed ?  "bg-gray-100 text-gray-400" : "";
               }}
             />
           </div>
