@@ -239,6 +239,7 @@ const EditPackage = () => {
                     name="tags"
                 >
                     <Select
+                    disabled
                         mode="multiple"
                         placeholder="Select tags"
                         className="w-full bg-black text-white"

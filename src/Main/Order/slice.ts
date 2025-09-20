@@ -12,9 +12,9 @@ export interface MyOrdersState {
   payRemainingAmountError: any;
   payRemainingAmountdata: string | null;
   cancelRequestLoading: boolean;
-cancelRequestError: any;
-cancelRequestData: any;
-
+  cancelRequestError: any;
+  cancelRequestData: any;
+  canceledRequest: boolean;
 }
 
 const initialState: MyOrdersState = {
@@ -28,9 +28,9 @@ const initialState: MyOrdersState = {
   payRemainingAmountError: null,
   payRemainingAmountdata: null,
   cancelRequestLoading: false,
-cancelRequestError: null,
-cancelRequestData: null,
-
+  cancelRequestError: null,
+  cancelRequestData: null,
+  canceledRequest : false,
 };
 
 const MyOrdersSlice = createSlice({
@@ -72,16 +72,25 @@ const MyOrdersSlice = createSlice({
       state.cancelRequestLoading = true;
       state.cancelRequestError = null;
       state.cancelRequestData = null;
+      state.canceledRequest = false;
     },
     fetchCancelRequestSuccess: (state, action: PayloadAction<any>) => {
       state.cancelRequestLoading = false;
       state.cancelRequestData = action.payload;
       state.cancelRequestError = null;
+      state.canceledRequest = true;
     },
     fetchCancelRequestFailure: (state, action: PayloadAction<any>) => {
       state.cancelRequestLoading = false;
       state.cancelRequestError = action.payload;
       state.cancelRequestData = null;
+      state.canceledRequest = false;
+    },
+    resetCancelRequest:(state) => {
+      state.cancelRequestLoading = false;
+      state.cancelRequestError = null;
+      state.cancelRequestData = null;
+      state.canceledRequest = false;
     },
 
     resetRemainingAmountSlice: (state) => {
@@ -102,7 +111,8 @@ export const {
   resetRemainingAmountSlice,
   fetchCancel,
   fetchCancelRequestSuccess,
-  fetchCancelRequestFailure
+  fetchCancelRequestFailure,
+  resetCancelRequest,
 } = MyOrdersSlice.actions;
 
 export default MyOrdersSlice.reducer;
