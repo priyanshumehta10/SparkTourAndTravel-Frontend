@@ -1,9 +1,9 @@
 import { useEffect, useRef } from "react";
-import { Table, Tag, Card, Typography, Modal, Input } from "antd";
+import { Table, Tag, Card, Typography, Modal, Input, message } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchMyOrdersRequest, resetRemainingAmountSlice, fetchpayRemainingAmountRequest ,fetchCancel} from "./slice";
-import { confirmOrderRequest } from "../Packages/slice";
+import { fetchMyOrdersRequest, resetRemainingAmountSlice, fetchpayRemainingAmountRequest, fetchCancel, resetCancelRequest } from "./slice";
+import { confirmOrderRequest, resetConfirmBookSlice } from "../Packages/slice";
 import type { RootState } from "../../redux/store";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 
@@ -31,7 +31,7 @@ interface Booking {
   paymentStatus: "pending" | "partial" | "paid" | "cancel";
   startingDate: string;
   bookedAt: string;
-  cancelRequest:any;
+  cancelRequest: any;
 }
 
 const MyOrders = () => {
@@ -45,63 +45,112 @@ const MyOrders = () => {
     dispatch(fetchpayRemainingAmountRequest(bookingId));
   };
 
-const handleCancel = (bookingId: string) => {
-  let reason = "";
+  const handleCancel = (bookingId: string) => {
+    let reason = "";
 
-  confirm({
-    title: "Do you really want to cancel?",
-    icon: <ExclamationCircleOutlined />,
-    content: (
-      <div>
-        <p>
-          This action cannot be undone. Please read our refund policy before
-          canceling.
-        </p>
-        <Input.TextArea
-          placeholder="Enter cancellation reason"
-          rows={3}
-          onChange={(e) => {
-            reason = e.target.value;
-          }}
-        />
-      </div>
-    ),
-    okText: "Yes, Cancel",
-    okType: "danger",
-    cancelText: "No, Keep Booking",
-    async onOk() {
-      if (!reason.trim()) {
-        Modal.error({
-          title: "Reason required",
-          content: "Please provide a reason before cancelling.",
-        });
-        throw new Error("Reason is required"); // prevent closing modal
-      }
+    confirm({
+      title: "Do you really want to cancel?",
+      icon: <ExclamationCircleOutlined />,
+      content: (
+        <div>
+          <p>
+            This action cannot be undone. Please read our refund policy before
+            canceling.
+          </p>
+          <Input.TextArea
+            placeholder="Enter cancellation reason"
+            rows={3}
+            onChange={(e) => {
+              reason = e.target.value;
+            }}
+          />
+        </div>
+      ),
+      okText: "Yes, Cancel",
+      okType: "danger",
+      cancelText: "No, Keep Booking",
+      async onOk() {
+        if (!reason.trim()) {
+          Modal.error({
+            title: "Reason required",
+            content: "Please provide a reason before cancelling.",
+          });
+          throw new Error("Reason is required"); // prevent closing modal
+        }
 
-      console.log("Booking canceled:", bookingId, "Reason:", reason);
+        console.log("Booking canceled:", bookingId, "Reason:", reason);
 
-      dispatch(fetchCancel({ bookingId, reason }))
-    },
-  })}
+        dispatch(fetchCancel({ bookingId, reason }))
+      },
+    })
+  }
 
 
-  useEffect(() => {
-    if (!fetchData.current) {
-      fetchData.current = true;
-      dispatch(fetchMyOrdersRequest(user?.id));
-    }
-  }, [dispatch, user?.id]);
 
-  const { MyOrdersLoading, MyOrdersdata, payRemainingAmountdata } = useSelector(
+
+  const { MyOrdersLoading, MyOrdersdata, payRemainingAmountdata, canceledRequest, cancelRequestError, payRemainingAmountError } = useSelector(
     (state: RootState) => state.orders
   );
 
+  const { confirmedOrder, confirmOrderError } = useSelector(
+    (state: RootState) => state.packageFront
+  );
+
+  useEffect(() => {
+    if (!fetchData.current || canceledRequest || cancelRequestError || confirmedOrder || confirmOrderError || payRemainingAmountdata || payRemainingAmountError) {
+      fetchData.current = true;
+      dispatch(fetchMyOrdersRequest(user?.id));
+    }
+  }, [dispatch, user?.id, canceledRequest, cancelRequestError, confirmedOrder, confirmOrderError, payRemainingAmountdata, payRemainingAmountError]);
+
+  useEffect(() => {
+    //cancel req
+    if (canceledRequest) {
+      message.success({
+        content: "Cancellation request initiated. Payment will be refunded in 24-48 hrs",
+        duration: 5, // in seconds
+      });
+    }
+    if (cancelRequestError) {
+      message.error({
+        content: cancelRequestError
+      });
+    }
+
+    dispatch(resetCancelRequest())
+
+  }, [dispatch, canceledRequest, cancelRequestError])
+  //confirm bookings
+  useEffect(() => {
+
+    if (confirmedOrder) {
+      message.success({
+        content: "Cancellation request initiated. Payment will be refunded in 24-48 hrs",
+        duration: 5, // in seconds
+      });
+    }
+    if (confirmOrderError) {
+      message.error({
+        content: confirmOrderError
+      });
+    }
+
+    dispatch(resetConfirmBookSlice())
+
+  }, [dispatch, confirmOrderError, confirmedOrder])
+  //remaining amount
   useEffect(() => {
     if (payRemainingAmountdata) {
       openRazorpay(payRemainingAmountdata);
-      dispatch(resetRemainingAmountSlice());
     }
-  }, [payRemainingAmountdata, dispatch]);
+    if (payRemainingAmountError) {
+      message.error({
+        content: cancelRequestError
+      });
+    }
+    dispatch(resetRemainingAmountSlice());
+
+  }, [payRemainingAmountdata, payRemainingAmountError, dispatch]);
 
   const openRazorpay = (orderData: any) => {
     if (!(window as any).Razorpay) {
@@ -154,8 +203,8 @@ const handleCancel = (bookingId: string) => {
     },
     {
       title: "Amount",
-      dataIndex: "amount",
-      key: "amount",
+      dataIndex: "totalAmount",
+      key: "totalAmount",
       render: (amt: number) => `₹${amt}`,
     },
     {
@@ -219,10 +268,18 @@ const handleCancel = (bookingId: string) => {
 
         return (
           <div className="flex gap-2">
-             {record.paymentStatus !== "cancel" && (
+            {record.paymentStatus !== "cancel" && (
               <button
-                className="px-3 py-1 !bg-red-600 text-white rounded-md"
+                style={{
+                  backgroundColor: record?.cancelRequest?.requested ? "#9ca3af" : "#dc2626", // gray-400 or red-600
+                  color: "white",
+                  borderRadius: "6px",
+                  padding: "4px 12px",
+                  cursor: record?.cancelRequest?.requested ? "not-allowed" : "pointer",
+                  opacity: record?.cancelRequest?.requested ? 0.6 : 1,
+                }}
                 onClick={() => handleCancel(record._id)}
+                disabled={record?.cancelRequest?.requested}
               >
                 Cancel
               </button>
@@ -230,13 +287,22 @@ const handleCancel = (bookingId: string) => {
             {record.paymentType === "50" &&
               record.paymentStatus === "partial" && (
                 <button
-                  className="px-3 py-1 !bg-blue-600 text-white rounded-md"
+                  style={{
+                    backgroundColor: record?.cancelRequest?.requested ? "#9ca3af" : "#2563eb", // gray-400 or blue-600
+                    color: "white",
+                    borderRadius: "6px",
+                    padding: "4px 12px",
+                    cursor: record?.cancelRequest?.requested ? "not-allowed" : "pointer",
+                    opacity: record?.cancelRequest?.requested ? 0.6 : 1,
+                  }}
                   onClick={() => handlePayRemaining(record._id)}
+                  disabled={record?.cancelRequest?.requested}
                 >
                   Pay Remaining
                 </button>
+
               )}
-           
+
           </div>
         );
       },
@@ -265,7 +331,7 @@ const handleCancel = (bookingId: string) => {
               scroll={{ x: true }}
               rowClassName={(record) => {
                 const tripDate = new Date(record.startingDate);
-                return tripDate < new Date() ? "bg-gray-100 text-gray-400" : record.paymentStatus === "pending"? "bg-gray-100 text-gray-400" : record?.cancelRequest?.confirmed ?  "bg-gray-100 text-gray-400" : "";
+                return tripDate < new Date() ? "bg-gray-100 text-gray-400" : record.paymentStatus === "pending" ? "bg-gray-100 text-gray-400" : record?.cancelRequest?.confirmed ? "bg-gray-100 text-gray-400" : "";
               }}
             />
           </div>

@@ -33,7 +33,7 @@ function* fetchpayRemainingAmount(action: PayloadAction<any>): SagaIterator {
     yield put(fetchpayRemainingAmountSuccess(data));
   } catch (error: any) {
     yield put(
-      fetchpayRemainingAmountFailure(error.message || "Something went wrong")
+      fetchpayRemainingAmountFailure(error.response.data.message || "Something went wrong")
     );
   }
 }
@@ -46,8 +46,10 @@ function* fetchCancelRequest(
 
     yield put(fetchCancelRequestSuccess(data));
   } catch (error: any) {
+    console.log(error);
+    
     yield put(
-      fetchCancelRequestFailure(error.message || "Something went wrong")
+      fetchCancelRequestFailure(error.response.data.message || "Something went wrong")
     );
   }
 }

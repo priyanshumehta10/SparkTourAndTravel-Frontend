@@ -114,7 +114,7 @@ function* confirmOrderSaga(action: { type: any; payload: any }): SagaIterator {
 
     yield put(confirmOrderSuccess(data));
   } catch (error: any) {
-    yield put(confirmOrderFailure(error.message || "Something went wrong"));
+    yield put(confirmOrderFailure(error.response.data.message || "Something went wrong"));
   }
 }
 

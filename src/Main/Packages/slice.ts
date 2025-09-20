@@ -20,9 +20,10 @@ export interface PackageGroupState {
   confirmOrderLoading: boolean;
   confirmOrderError: string | null;
   confirmOrderdata: any;
-  filterPackageGroupLoading:boolean;
-  filterPackageGroupError:string|null;
-  filterPackageGroupdata:any;
+  filterPackageGroupLoading: boolean;
+  filterPackageGroupError: string | null;
+  filterPackageGroupdata: any;
+  confirmedOrder: boolean;
 }
 
 const initialState: PackageGroupState = {
@@ -44,9 +45,10 @@ const initialState: PackageGroupState = {
   confirmOrderLoading: false,
   confirmOrderError: null,
   confirmOrderdata: null,
-  filterPackageGroupLoading:false,
-  filterPackageGroupError:null,
-  filterPackageGroupdata:null,
+  filterPackageGroupLoading: false,
+  filterPackageGroupError: null,
+  filterPackageGroupdata: null,
+  confirmedOrder: false,
 };
 
 const PackageGroupSlice = createSlice({
@@ -135,25 +137,30 @@ const PackageGroupSlice = createSlice({
       state.confirmOrderLoading = true;
       state.confirmOrderError = null;
       state.confirmOrderdata = null;
+      state.confirmedOrder = false;
     },
     confirmOrderSuccess: (state, action: PayloadAction<any>) => {
       state.confirmOrderLoading = false;
       state.confirmOrderError = null;
       state.confirmOrderdata = action.payload;
+      state.confirmedOrder = true;
     },
     confirmOrderFailure: (state, action: PayloadAction<string>) => {
       state.confirmOrderLoading = false;
       state.confirmOrderError = action.payload;
       state.confirmOrderdata = null;
+      state.confirmedOrder = false;
     },
-    resetCreateBookSlice:(state) => {
-state.createOrderLoading = false;
+    resetCreateBookSlice: (state) => {
+      state.createOrderLoading = false;
       state.createOrderdata = null;
     },
-    resetConfirmBookSlice:(state) => {
-      state.confirmOrderLoading = false;
+    resetConfirmBookSlice: (state) => {
+      state.confirmOrderLoading = true;
+      state.confirmOrderError = null;
       state.confirmOrderdata = null;
-    }
+      state.confirmedOrder = false;
+    },
   },
 });
 
@@ -177,7 +184,7 @@ export const {
   resetConfirmBookSlice,
   fetchFilterPackageGroupSuccess,
   fetchFilterPackageGroupRequest,
-  fetchFilterPackageGroupFailure
+  fetchFilterPackageGroupFailure,
 } = PackageGroupSlice.actions;
 
 export default PackageGroupSlice.reducer;

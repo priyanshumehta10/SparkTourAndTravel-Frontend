@@ -19,7 +19,7 @@ const BookingForm: React.FC = () => {
   const { createOrderdata, confirmOrderdata } = useSelector(
     (state: RootState) => state.packageFront
   );
-console.log(packageData);
+  console.log(packageData);
 
   const [people, setPeople] = useState([{ name: "", age: "", gender: "" }]);
   const [contact, setContact] = useState({ mobile: "", email: "" });
@@ -28,10 +28,10 @@ console.log(packageData);
     setPeople([...people, { name: "", age: "", gender: "" }]);
 
   // Determine if special discount applies based on current people length
-const isSpecial =
-  people.length >= 4 &&
-  packageData?.specialDiscount > 0 &&
-  packageData?.finalSpecialPrice > 0;
+  const isSpecial =
+    people.length >= 4 &&
+    packageData?.specialDiscount > 0 &&
+    packageData?.finalSpecialPrice > 0;
 
   const payableAmount = useMemo(() => {
     if (!packageData) return 0;
@@ -341,6 +341,15 @@ const isSpecial =
             />
           </div>
           {/* Trip Start Date */}
+          <p className="text-gray-600 hover:text-gray-800">
+            Package is only available for one month, for more info contact us :{" "}
+            <a
+              href="/contact"
+              className=" font-semibold underline hover:text-blue-800"
+            >
+              click here
+            </a>
+          </p>
           <div>
             <label className="block text-[#305BAB] font-semibold mb-1">
               Trip Start Date
@@ -349,10 +358,15 @@ const isSpecial =
               type="date"
               className="w-full border rounded p-2 !text-[#1a2753] focus:outline-none focus:ring-2 focus:ring-[#305BAB]"
               value={startDate}
+              min={new Date().toISOString().split("T")[0]} // today
+              max={new Date(new Date().setMonth(new Date().getMonth() + 1))
+                .toISOString()
+                .split("T")[0]} // today + 1 month
               onChange={(e) => setStartDate(e.target.value)}
               required
             />
           </div>
+
 
         </div>
 
