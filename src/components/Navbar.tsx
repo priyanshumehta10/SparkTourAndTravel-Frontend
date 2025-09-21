@@ -38,7 +38,7 @@ export default function Navbar() {
             <div className="flex flex-col">
               {/* Smaller text size on mobile */}
               <span className="text-lg sm:text-3xl font-bold tracking-wide">
-                Sparks Tours and Travels
+                Spark Tour and Travels
               </span>
               <span className="text-xs sm:text-sm text-gray-600">
                 Your Journey, Our Responsibility
