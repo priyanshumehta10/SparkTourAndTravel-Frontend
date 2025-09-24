@@ -71,137 +71,137 @@ export default function Navbar() {
       </div>
 
 
-{/* ✅ Bottom Bar */}
-<div className="w-full bg-[#1a2753] text-white">
-  <div className="max-w-7xl mx-auto flex items-center justify-between px-8 py-5">
-    {/* Nav Links (Desktop only) */}
-    <motion.nav
-      initial={{ opacity: 0, y: -10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      className="hidden md:flex space-x-10"
-    >
-      {[
-        { path: "/", label: "Home" },
-        { path: "/packages", label: "Packages" },
-        { path: "/about", label: "About" },
-        { path: "/contact", label: "Contact" },
-        { path: "/bookings", label: "My Bookings" },
-      ].map((link) => (
-        <Link
-          key={link.path}
-          to={link.path}
-          className="hover:text-gray-300 text-xl transition px-3"
+      {/* ✅ Bottom Bar */}
+      <div className="w-full bg-[#1a2753] text-white">
+        <div className="max-w-7xl mx-auto flex items-center justify-between px-8 py-5">
+          {/* Nav Links (Desktop only) */}
+          <motion.nav
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="hidden md:flex space-x-10"
+          >
+            {[
+              { path: "/", label: "Home" },
+              { path: "/packages", label: "Packages" },
+              { path: "/about", label: "About" },
+              { path: "/contact", label: "Contact" },
+              { path: "/bookings", label: "My Bookings" },
+            ].map((link) => (
+              <Link
+                key={link.path}
+                to={link.path}
+                className="hover:text-gray-300 text-xl transition px-3"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </motion.nav>
+
+          {/* Auth Section (small screens only, blue bar) */}
+          <div className="flex sm:hidden items-center space-x-3">
+            {!isAuthenticated ? (
+              <Link
+                to="/login"
+                className="px-3 py-1 rounded bg-[#305BAB] text-white text-sm hover:bg-[#1a2753] transition"
+              >
+                Login
+              </Link>
+            ) : (
+              <span className="text-xs">Hi, {user?.email}</span>
+            )}
+          </div>
+
+
+          {/* Social Icons (Desktop only) */}
+          <div className="hidden md:flex space-x-8 text-3xl pr-2">
+            <a
+              href="https://instagram.com"
+              target="_blank"
+              rel="noreferrer"
+              className="hover:text-pink-500 transition"
+            >
+              <InstagramOutlined />
+            </a>
+            <a
+              href="https://wa.me/918875949835"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-green-500 transition"
+            >
+              <WhatsAppOutlined />
+            </a>
+          </div>
+
+          {/* Mobile Menu Button */}
+          <button
+            className="md:hidden text-white text-3xl px-2"
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            {isOpen ? <CloseOutlined /> : <MenuOutlined />}
+          </button>
+        </div>
+      </div>
+
+      {/* ✅ Mobile Dropdown */}
+      {isOpen && (
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+          className="md:hidden bg-white text-black shadow-md px-8 py-6 space-y-6"
         >
-          {link.label}
-        </Link>
-      ))}
-    </motion.nav>
+          {[
+            { path: "/", label: "Home" },
+            { path: "/packages", label: "Packages" },
+            { path: "/about", label: "About" },
+            { path: "/contact", label: "Contact" },
+            { path: "/bookings", label: "My Bookings" },
+          ].map((link) => (
+            <Link
+              key={link.path}
+              to={link.path}
+              onClick={() => setIsOpen(false)}
+              className="block font-medium px-3 py-2"
+            >
+              {link.label}
+            </Link>
+          ))}
 
-{/* Auth Section (small screens only, blue bar) */}
-<div className="flex sm:hidden items-center space-x-3">
-  {!isAuthenticated ? (
-    <Link
-      to="/login"
-      className="px-3 py-1 rounded bg-[#305BAB] text-white text-sm hover:bg-[#1a2753] transition"
-    >
-      Login
-    </Link>
-  ) : (
-    <span className="text-xs">Hi, {user?.email}</span>
-  )}
-</div>
+          {/* Show logout button here if authenticated */}
+          {isAuthenticated && (
+            <button
+              onClick={() => {
+                handleLogout();
+                setIsOpen(false);
+              }}
+              className="w-full bg-red-600 px-4 py-2 rounded text-white hover:bg-red-700 transition"
+            >
+              Logout
+            </button>
+          )}
 
-
-    {/* Social Icons (Desktop only) */}
-    <div className="hidden md:flex space-x-8 text-3xl pr-2">
-      <a
-        href="https://instagram.com"
-        target="_blank"
-        rel="noreferrer"
-        className="hover:text-pink-500 transition"
-      >
-        <InstagramOutlined />
-      </a>
-      <a
-        href="https://wa.me/+918875949835"
-        target="_blank"
-        rel="noreferrer"
-        className="hover:text-green-500 transition"
-      >
-        <WhatsAppOutlined />
-      </a>
-    </div>
-
-    {/* Mobile Menu Button */}
-    <button
-      className="md:hidden text-white text-3xl px-2"
-      onClick={() => setIsOpen(!isOpen)}
-    >
-      {isOpen ? <CloseOutlined /> : <MenuOutlined />}
-    </button>
-  </div>
-</div>
-
-{/* ✅ Mobile Dropdown */}
-{isOpen && (
-  <motion.div
-    initial={{ opacity: 0, y: -10 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.3 }}
-    className="md:hidden bg-white text-black shadow-md px-8 py-6 space-y-6"
-  >
-    {[
-      { path: "/", label: "Home" },
-      { path: "/packages", label: "Packages" },
-      { path: "/about", label: "About" },
-      { path: "/contact", label: "Contact" },
-      { path: "/bookings", label: "My Bookings" },
-    ].map((link) => (
-      <Link
-        key={link.path}
-        to={link.path}
-        onClick={() => setIsOpen(false)}
-        className="block font-medium px-3 py-2"
-      >
-        {link.label}
-      </Link>
-    ))}
-
-    {/* Show logout button here if authenticated */}
-    {isAuthenticated && (
-      <button
-        onClick={() => {
-          handleLogout();
-          setIsOpen(false);
-        }}
-        className="w-full bg-red-600 px-4 py-2 rounded text-white hover:bg-red-700 transition"
-      >
-        Logout
-      </button>
-    )}
-
-    {/* Social icons */}
-    <div className="flex space-x-8 text-3xl pt-6">
-      <a
-        href="https://www.instagram.com/spark_tour_and_travels_/?igsh=MWZ5ZzJld3NqaDNsMw%3D%3D#"
-        target="_blank"
-        rel="noreferrer"
-        className="hover:text-pink-500 transition "
-      >
-        <InstagramOutlined />
-      </a>
-      <a
-        href="https://wa.me/yourNumber"
-        target="_blank"
-        rel="noreferrer"
-        className="hover:text-green-500 transition"
-      >
-        <WhatsAppOutlined />
-      </a>
-    </div>
-  </motion.div>
-)}
+          {/* Social icons */}
+          <div className="flex space-x-8 text-3xl pt-6">
+            <a
+              href="https://www.instagram.com/spark_tour_and_travels_/?igsh=MWZ5ZzJld3NqaDNsMw%3D%3D#"
+              target="_blank"
+              rel="noreferrer"
+              className="hover:text-pink-500 transition "
+            >
+              <InstagramOutlined />
+            </a>
+            <a
+              href="https://wa.me/yourNumber"
+              target="_blank"
+              rel="noreferrer"
+              className="hover:text-green-500 transition"
+            >
+              <WhatsAppOutlined />
+            </a>
+          </div>
+        </motion.div>
+      )}
 
 
 
