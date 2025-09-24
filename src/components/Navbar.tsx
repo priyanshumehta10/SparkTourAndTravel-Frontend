@@ -192,9 +192,9 @@ export default function Navbar() {
               <InstagramOutlined />
             </a>
             <a
-              href="https://wa.me/yourNumber"
+              href="https://wa.me/918875949835"
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
               className="hover:text-green-500 transition"
             >
               <WhatsAppOutlined />
