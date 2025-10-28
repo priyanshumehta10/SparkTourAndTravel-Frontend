@@ -49,7 +49,7 @@ const PackageDetails: React.FC = () => {
 
   // Clean inclusions/exclusions (replace double commas with single)
   const inclusions = PackageDetailsdata.tourInclusions
-    ? PackageDetailsdata.tourInclusions.split(",").map((i: string) => i.trim())
+    ? PackageDetailsdata.tourInclusions.split(",,").map((i: string) => i.trim())
     : [];
 
   const exclusions = PackageDetailsdata.tourExclusions
